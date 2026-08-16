@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-    <title>فلانة - الابتدائية الأولى (لوحة تحكم مادة الرياضيات)</title>
+    <title>الابتدائية الأولى - لوحة تحكم مادة الرياضيات</title>
     <!-- مكتبة SheetJS لتصدير واستيراد ملفات إكسل Excel -->
     <script src="https://cdn.jsdelivr.net/npm/xlsx@0.18.5/dist/xlsx.full.min.js"></script>
     <!-- مكتبة Chart.js للرسوم البيانية -->
@@ -207,7 +207,7 @@
             flex-wrap: wrap;
         }
 
-        .form-row input, .form-row select {
+        .form-row input, .form-row select, .form-row textarea {
             flex: 1;
             min-width: 100%;
             padding: 12px;
@@ -217,10 +217,11 @@
             background-color: var(--card-bg);
             color: var(--text);
             box-sizing: border-box;
+            font-family: inherit;
         }
 
         @media (min-width: 640px) {
-            .form-row input, .form-row select { min-width: 160px; font-size: 14px; }
+            .form-row input, .form-row select, .form-row textarea { min-width: 160px; font-size: 14px; }
         }
 
         button {
@@ -634,7 +635,7 @@
             body { background: white !important; color: black !important; padding: 0 !important; }
             .top-banner, .subscription-badge, .theme-switcher, .floating-action-buttons, .toast,
             .btn-action, .backup-controls, .pagination-bar, .form-row, .classes-query-grid,
-            .no-print, button, input, select, .sub-box, .searchable-dropdown-container { display: none !important; }
+            .no-print, button, input, select, textarea, .sub-box, .searchable-dropdown-container { display: none !important; }
             
             .container { max-width: 100% !important; margin: 0 !important; width: 100% !important; }
             .section-card { box-shadow: none !important; border: 1px solid #ccc !important; page-break-inside: avoid; }
@@ -915,13 +916,26 @@
         <div class="section-card">
             <h3 id="curriculumTitle">📚 دليل مقرر الرياضيات - المرحلة الابتدائية (المنهج السعودي) وتتبع التنفيذ</h3>
             
+            <!-- إضافة درس فردي -->
             <div class="sub-box" style="margin-bottom: 15px; margin-top: 0;">
-                <h5 style="margin-bottom: 10px;">➕ إضافة درس جديد أو وحدة للمنهج</h5>
+                <h5 style="margin-bottom: 10px;">➕ إضافة درس جديد فردي</h5>
                 <div class="form-row">
                     <input type="text" id="newLessonTitle" placeholder="عنوان الفصل والدرس...">
                     <input type="text" id="newLessonDesc" placeholder="تفاصيل المهارات والتمارين الرياضية...">
                     <button onclick="addNewLesson()">➕ إضافة الدرس</button>
                 </div>
+            </div>
+
+            <!-- إضافة مجموعة دروس دفعة واحدة -->
+            <div class="sub-box" style="margin-bottom: 15px; background: rgba(5, 150, 105, 0.04); border: 1px solid var(--secondary);">
+                <h5 style="margin-bottom: 10px; color: var(--secondary);">📦 إضافة مجموعة دروس دفعة واحدة</h5>
+                <p style="font-size: 12px; opacity: 0.85; margin-top: 0;">اكتب كل درس في سطر مستقل بالتنسيق التالي: (عنوان الدرس | التفاصيل والمهارة)</p>
+                <div class="form-row">
+                    <textarea id="bulkLessonsText" rows="3" placeholder="مثال:
+الدرس الأول: الجمع بالعد التنازلي | مهارة استخدام خط الأعداد
+الدرس الثاني: الطرح بالعد العكسي | حل التمارين الذهنية"></textarea>
+                </div>
+                <button class="btn-excel" onclick="addBulkLessonsBatch()">📥 إضافة مجموعة الدروس دفعة واحدة</button>
             </div>
 
             <div class="sub-box" style="background: rgba(37,99,235,0.03); border: 1px solid var(--secondary);">
@@ -995,7 +1009,7 @@
             "الثاني الابتدائي": [
                 { chapter: "الفصل 1: القيمة المنزلية حتى 100", title: "آحاد وعشرات وقراءة الأعداد ضمن 100", desc: "تمثيل الأعداد في لوحة المنازل ومقارنتها وترتيبها." },
                 { chapter: "الفصل 2: طرائق الجمع والطرح", title: "خصائص الجمع واتجاهات الطرح", desc: "استعمال خصائص الإبدال وتكوين العشرات لحل مسائل الجمع والطرح." },
-                { chapter: "الفصل 3: الأعداد حتى 1000", title: "المئات والآحاد والعشرات حتى 1000", desc: "قراءة وكتابة الأعداد المكونة من ثلاثة أرقام وتحديد القيمة المنزلية." },
+                { chapter: "الفصل 3: الأعداد حتى 1000", title: "المئات والمآحاد والعشرات حتى 1000", desc: "قراءة وكتابة الأعداد المكونة من ثلاثة أرقام وتحديد القيمة المنزلية." },
                 { chapter: "الفصل 4: الجمع والطرح ضمن الـ 1000", title: "جمع وطرح الأعداد الكبيرة", desc: "إجراء عمليات الجمع والطرح مع إعادة التجميع وبدونها." },
                 { chapter: "الفصل 5: القياس: الطول والمحيط", title: "قياس الأطوال بالسنتيمتر والمتر", desc: "استعمال أدوات القياس القياسية لحساب الأطوال." },
                 { chapter: "الفصل 6: القياس: المساحة والكتلة والسعة", title: "تقدير القياسات ووحداتها المعيارية", desc: "دراسة وحدات الكتلة (الجرام والكيلوجرام) والسعة (اللتر)." },
@@ -1188,6 +1202,36 @@
             showToast('➕ تم إضافة الدرس وحفظه!');
         }
 
+        // دالة لإضافة مجموعة دروس دفعة واحدة
+        function addBulkLessonsBatch() {
+            const text = document.getElementById('bulkLessonsText').value.trim();
+            if(!text) { alert('يرجى كتابة الدروس في مربع النص أولاً'); return; }
+
+            const lines = text.split('\n');
+            let addedCount = 0;
+
+            lines.forEach(line => {
+                const cleanLine = line.trim();
+                if(cleanLine) {
+                    let parts = cleanLine.split('|');
+                    let title = parts[0] ? parts[0].trim() : cleanLine;
+                    let desc = parts[1] ? parts[1].trim() : 'دروس مضافة دفعة واحدة';
+                    
+                    lessons.push({ chapter: "دروس إضافية (دفعة)", title: title, desc: desc });
+                    addedCount++;
+                }
+            });
+
+            if(addedCount > 0) {
+                localStorage.setItem(getStorageKeyForLessons(), JSON.stringify(lessons));
+                document.getElementById('bulkLessonsText').value = '';
+                renderLessons();
+                showToast(`📥 تمت إضافة (${addedCount}) دروس بنجاح!`);
+            } else {
+                alert('لم يتم العثور على أسطر صالحة للإضافة.');
+            }
+        }
+
         function deleteLesson(index) {
             if (confirm('هل أنت متأكد من حذف هذا الدرس من المنهج؟')) {
                 lessons.splice(index, 1);
@@ -1206,6 +1250,30 @@
 
         function render() {
             document.getElementById('totalStudents').textContent = students.length;
+            
+            let totalSkillsSum = 0;
+            let totalPartSum = 0;
+            let totalHwSum = 0;
+            let totalAbsSum = 0;
+            let totalProjSum = 0;
+            let totalMsgSum = 0;
+
+            students.forEach(s => {
+                totalSkillsSum += Number(s.skills) || 0;
+                totalPartSum += Number(s.participation) || 0;
+                totalHwSum += Number(s.homework) || 0;
+                totalAbsSum += Number(s.absence) || 0;
+                totalProjSum += Number(s.projects) || 0;
+                totalMsgSum += Number(s.messages) || 0;
+            });
+
+            document.getElementById('totalSkills').textContent = totalSkillsSum;
+            document.getElementById('totalParticipation').textContent = totalPartSum;
+            document.getElementById('totalHomework').textContent = totalHwSum;
+            document.getElementById('totalAbsence').textContent = totalAbsSum;
+            document.getElementById('totalProjects').textContent = totalProjSum;
+            document.getElementById('totalMessagesSent').textContent = totalMsgSum;
+
             renderStudentsTable();
             renderClassesQuery();
         }
@@ -1291,6 +1359,7 @@
         function updateStudentField(index, field, val) {
             students[index][field] = Number(val) || 0;
             localStorage.setItem(getStorageKeyForStudents(), JSON.stringify(students));
+            render();
             showToast('✅ تم تحديث بيانات الطالبة وحفظها!');
         }
 
@@ -1720,7 +1789,7 @@
             localStorage.setItem('awwal_math_theme_v4', themeName);
         }
 
-        const savedTheme = localStorage.getItem('awwal_math_theme_v04');
+        const savedTheme = localStorage.getItem('awwal_math_theme_v4');
         if(savedTheme) document.body.className = savedTheme;
 
         window.onload = function() {
