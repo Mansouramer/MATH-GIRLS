@@ -200,30 +200,6 @@
             .section-card h3 { font-size: 18px; }
         }
 
-        .charts-grid {
-            display: grid;
-            grid-template-columns: 1fr;
-            gap: 15px;
-            margin-top: 15px;
-        }
-
-        @media (min-width: 768px) {
-            .charts-grid { grid-template-columns: repeat(auto-fit, minmax(320px, 1fr)); gap: 20px; }
-        }
-
-        .chart-box {
-            background: rgba(0,0,0,0.02);
-            border: 1px solid rgba(0,0,0,0.08);
-            border-radius: 10px;
-            padding: 10px;
-            position: relative;
-            height: 260px;
-        }
-
-        @media (min-width: 768px) {
-            .chart-box { height: 300px; padding: 15px; }
-        }
-
         .form-row {
             display: flex;
             gap: 10px;
@@ -237,7 +213,7 @@
             padding: 12px;
             border: 1px solid #ccc;
             border-radius: 6px;
-            font-size: 16px; /* منع التكبير التلقائي في آي فون */
+            font-size: 16px;
             background-color: var(--card-bg);
             color: var(--text);
             box-sizing: border-box;
@@ -334,7 +310,6 @@
             color: white;
         }
 
-        /* تحسين التمرير الأفقي للجداول على الشاشات الصغيرة */
         .table-responsive {
             width: 100%;
             overflow-x: auto;
@@ -655,7 +630,6 @@
         .float-whatsapp { background: #25D366; }
         .float-top { background: var(--primary); display: none; }
 
-        /* تنسيقات الطباعة */
         @media print {
             body { background: white !important; color: black !important; padding: 0 !important; }
             .top-banner, .subscription-badge, .theme-switcher, .floating-action-buttons, .toast,
@@ -745,51 +719,6 @@
             <div class="stat-card">
                 <h3>✅ الدروس المنفذة</h3>
                 <p id="totalExecutedLessons">0 / 0</p>
-            </div>
-        </div>
-
-        <!-- لوحة التحليل الذكي مع زر الطباعة -->
-        <div class="section-card" id="analyticsSection">
-            <div style="display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 10px; border-bottom: 2px solid rgba(0,0,0,0.1); padding-bottom: 10px; margin-bottom: 15px;">
-                <h3 style="margin: 0; border: none; padding: 0;">🧠 لوحة التحليل الذكي ومؤشرات الأداء الأكاديمي</h3>
-                <button class="btn-print" onclick="printSection('analyticsSection')">🖨️ طباعة تقرير التحليل</button>
-            </div>
-
-            <div class="student-details" style="grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); margin-bottom: 20px;">
-                <div class="detail-item">
-                    <span>🏆 نسبة إنجاز المنهج العام</span>
-                    <strong id="kpiCurriculumProgress">0%</strong>
-                </div>
-                <div class="detail-item">
-                    <span>🌟 نسبة الطالبات المتفوقات (أعلى من 85%)</span>
-                    <strong id="kpiExcellenceRate">0%</strong>
-                </div>
-                <div class="detail-item">
-                    <span>⚠️ طالبات بحاجة لدعم عاجل</span>
-                    <strong id="kpiAtRiskCount" style="color: var(--danger);">0 طالبة</strong>
-                </div>
-                <div class="detail-item">
-                    <span>📈 متوسط تحصيل اختبارات الفترات</span>
-                    <strong id="kpiGeneralAvg">- / 20</strong>
-                </div>
-            </div>
-
-            <div class="sub-box" style="margin-top: 15px; border-color: var(--danger);">
-                <h5 style="color: var(--danger);">⚠️ قائمة طالبات بحاجة لدعم عاجل في الرياضيات (أقل من 60% أو تحصيل منخفض)</h5>
-                <div class="form-row" style="margin-bottom: 0;">
-                    <select id="atRiskDropdown" onchange="selectAtRiskStudent(this.value)">
-                        <option value="">-- اختر طالبة من قائمة الدعم العاجل لعرض ملفها --</option>
-                    </select>
-                </div>
-            </div>
-
-            <div class="charts-grid">
-                <div class="chart-box">
-                    <canvas id="academicLevelsChart"></canvas>
-                </div>
-                <div class="chart-box">
-                    <canvas id="examsComparisonChart"></canvas>
-                </div>
             </div>
         </div>
 
@@ -995,7 +924,6 @@
                 </div>
             </div>
 
-            <!-- قائمة منسدلة لدليل مقرر الرياضيات -->
             <div class="sub-box" style="background: rgba(37,99,235,0.03); border: 1px solid var(--secondary);">
                 <h5 style="color: var(--secondary);">📑 القائمة المنسدلة لدليل مقرر الرياضيات والوحدات الدراسية</h5>
                 <div class="form-row" style="margin-bottom: 10px;">
