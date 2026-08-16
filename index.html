@@ -421,7 +421,6 @@
             .preview-msg { padding: 12px; font-size: 14px; }
         }
 
-        /* تنسيق الأزرار وعناصر التواصل لعدم التداخل */
         .action-cell-container {
             display: flex;
             gap: 6px;
@@ -703,7 +702,7 @@
             </div>
         </div>
 
-        <!-- الإحصائيات (بدون تحليل ذكي) -->
+        <!-- الإحصائيات -->
         <div class="stats-grid">
             <div class="stat-card">
                 <h3>👥 إجمالي الطالبات</h3>
@@ -862,7 +861,6 @@
                 <div>
                     <h4>سجل الطالبة: <span id="selectedName"></span> (<span id="selectedClassBadge" class="class-badge"></span>)</h4>
                     
-                    <!-- تعديل رقم جوال الطالبة مباشرة من السجل المخصص -->
                     <div class="form-row" style="margin-top: 10px; align-items: center;">
                         <input type="tel" id="editStudentPhoneInput" placeholder="تعديل رقم الجوال..." style="flex:1;">
                         <button class="btn-info" onclick="saveStudentPhone()" style="width: auto;">💾 حفظ رقم الجوال</button>
@@ -939,7 +937,6 @@
         <div class="section-card">
             <h3 id="curriculumTitle">📚 دليل مقرر الرياضيات - المرحلة الابتدائية (المنهج السعودي) وتتبع التنفيذ</h3>
             
-            <!-- إضافة درس فردي -->
             <div class="sub-box" style="margin-bottom: 15px; margin-top: 0;">
                 <h5 style="margin-bottom: 10px;">➕ إضافة درس جديد فردي</h5>
                 <div class="form-row">
@@ -949,7 +946,6 @@
                 </div>
             </div>
 
-            <!-- إضافة مجموعة دروس دفعة واحدة (معدل بالكامل) -->
             <div class="sub-box" style="margin-bottom: 15px; background: rgba(5, 150, 105, 0.04); border: 1px solid var(--secondary);">
                 <h5 style="margin-bottom: 10px; color: var(--secondary);">📦 إضافة مجموعة دروس دفعة واحدة</h5>
                 <p style="font-size: 12px; opacity: 0.85; margin-top: 0;">اكتب كل درس في سطر مستقل بالتنسيق التالي: (عنوان الدرس | التفاصيل والمهارة)</p>
@@ -1032,7 +1028,7 @@
             "الثاني الابتدائي": [
                 { chapter: "الفصل 1: القيمة المنزلية حتى 100", title: "آحاد وعشرات وقراءة الأعداد ضمن 100", desc: "تمثيل الأعداد في لوحة المنازل ومقارنتها وترتيبها." },
                 { chapter: "الفصل 2: طرائق الجمع والطرح", title: "خصائص الجمع واتجاهات الطرح", desc: "استعمال خصائص الإبدال وتكوين العشرات لحل مسائل الجمع والطرح." },
-                { chapter: "الفصل 3: الأعداد حتى 1000", title: "المئات والمآحاد والعشرات حتى 1000", desc: "قراءة وكتابة الأعداد المكونة من ثلاثة أرقام وتحديد القيمة المنزلية." },
+                { chapter: "الفصل 3: الأعداد حتى 1000", title: "المئات والمآحاد وعشرات حتى 1000", desc: "قراءة وكتابة الأعداد المكونة من ثلاثة أرقام وتحديد القيمة المنزلية." },
                 { chapter: "الفصل 4: الجمع والطرح ضمن الـ 1000", title: "جمع وطرح الأعداد الكبيرة", desc: "إجراء عمليات الجمع والطرح مع إعادة التجميع وبدونها." },
                 { chapter: "الفصل 5: القياس: الطول والمحيط", title: "قياس الأطوال بالسنتيمتر والمتر", desc: "استعمال أدوات القياس القياسية لحساب الأطوال." },
                 { chapter: "الفصل 6: القياس: المساحة والكتلة والسعة", title: "تقدير القياسات ووحداتها المعيارية", desc: "دراسة وحدات الكتلة (الجرام والكيلوجرام) والسعة (اللتر)." },
@@ -1201,6 +1197,15 @@
 
             bulkSelectLesson.innerHTML += lessonsGroup + motivGroup;
             document.getElementById('totalExecutedLessons').textContent = `${executedCount} / ${lessons.length}`;
+            
+            // تحديث القائمة المنسدلة للرسائل التشجيعية في قسم الاستعلام الفردي
+            const selectMotivation = document.getElementById('selectMotivation');
+            if(selectMotivation) {
+                selectMotivation.innerHTML = '<option value="">-- اختر الرسالة التشجيعية --</option>';
+                customMotivations.forEach((m, idx) => {
+                    selectMotivation.innerHTML += `<option value="motiv-${idx}">${m.title}</option>`;
+                });
+            }
         }
 
         function toggleLessonStatus(index) {
@@ -1225,7 +1230,6 @@
             showToast('➕ تم إضافة الدرس وحفظه!');
         }
 
-        // إضافة مجموعة دروس دفعة واحدة
         function addBulkLessonsBatch() {
             const text = document.getElementById('bulkLessonsText').value.trim();
             if(!text) { alert('يرجى كتابة الدروس في مربع النص أولاً'); return; }
@@ -1386,7 +1390,6 @@
             showToast('✅ تم تحديث بيانات الطالبة وحفظها!');
         }
 
-        // حفظ وتعديل رقم جوال الطالبة
         function saveStudentPhone() {
             if(selectedStudentIndex === '') return;
             const newPhone = document.getElementById('editStudentPhoneInput').value.trim();
@@ -1515,7 +1518,7 @@
                     <td><input type="number" min="0" max="20" value="${s.exam2 || 0}" style="width:60px; text-align:center;" onchange="updateExamScore(${globalIndex}, 'exam2', this.value)"></td>
                     <td class="no-print">
                         <div class="action-cell-container">
-                            <a href="https://wa.me/${s.phone || ''}?text=${encodeURIComponent('عزيزي ولي أمر الطالبة ' + s.name + '، نود إفادتكم بدرجات اختبارات مادة الرياضيات:\n- اختبار الفترة الأولى: ' + (s.exam1 || 0) + '/20\n- اختبار الفترة الثانية: ' + (s.exam2 || 0) + '/20\nمع تمنياتنا لها بدوام التوفيق والنجاح.')}" target="_blank" class="whatsapp-btn" onclick="incrementMessageCount()">📤 إرسال عبر واتساب</a>
+                            <a href="https://wa.me/${s.phone || ''}?text=${encodeURIComponent('عزيزي ولي أمر الطالبة ' + s.name + '، نود إفادتكم بدرجات اختبارات مادة الرياضيات:\n- اختبار الفترة الأولى: ' + (s.exam1 || 0) + '/20\n- اختبار الفترة الثانية: ' + (s.exam2 || 0) + '/20\nمع تمنياتنا لها بدوام التوفيق والنجاح.')}" target="_blank" class="whatsapp-btn" onclick="incrementMessageCountGlobal(${globalIndex})">📤 إرسال عبر واتساب</a>
                         </div>
                     </td>
                 `;
@@ -1764,12 +1767,51 @@
             showToast('🌟 تمت إضافة رسالة التحفيز بنجاح!');
         }
 
+        // إرسال التقرير الشامل لولي الأمر عبر الواتساب (مفعل بالكامل)
+        function sendFullReportWhatsApp() {
+            if(selectedStudentIndex === '') return;
+            const s = students[selectedStudentIndex];
+            if(!s.phone) {
+                alert('لا يوجد رقم جوال مسجل لهذه الطالبة.');
+                return;
+            }
+
+            const fullMsg = `📋 *التقرير الشامل لأداء الطالبة في مادة الرياضيات* 📐\n\n` +
+                `👤 اسم الطالبة: *${s.name}*\n` +
+                `🏫 الصف: *${s.classCustom || currentGrade}*\n` +
+                `🏫 المدرسة: *${SCHOOL_NAME}*\n\n` +
+                `📊 *المؤشرات والإحصائيات الحالية:*\n` +
+                `- ✋ المشاركات: ${s.participation || 0}\n` +
+                `- 📚 الواجبات: ${s.homework || 0}\n` +
+                `- 🔴 أيام الغياب: ${s.absence || 0}\n` +
+                `- ⭐ المهارات الرياضية المتقنة: ${s.skills || 0}\n` +
+                `- 🛠️ التمارين المساندة المحلولة: ${s.projects || 0}\n` +
+                `- 📝 اختبار الفترة الأولى: ${s.exam1 || 0} / 20\n` +
+                `- 📝 اختبار الفترة الثانية: ${s.exam2 || 0} / 20\n\n` +
+                `نشكر لكم حرصكم ومتابعتكم المستمرة مع المدرسة.\n` +
+                `مع تحيات معلم المادة: ${TEACHER_NAME}`;
+
+            incrementMessageCount();
+            window.open(`https://wa.me/${s.phone}?text=` + encodeURIComponent(fullMsg), '_blank');
+        }
+
         function incrementMessageCount() {
             if(selectedStudentIndex !== '') {
                 students[selectedStudentIndex].messages = (students[selectedStudentIndex].messages || 0) + 1;
                 localStorage.setItem(getStorageKeyForStudents(), JSON.stringify(students));
                 selectStudentForDetails(selectedStudentIndex);
                 renderStudentsTable();
+            }
+        }
+
+        function incrementMessageCountGlobal(index) {
+            if(index !== undefined && students[index]) {
+                students[index].messages = (students[index].messages || 0) + 1;
+                localStorage.setItem(getStorageKeyForStudents(), JSON.stringify(students));
+                renderStudentsTable();
+                if(selectedStudentIndex === index) {
+                    selectStudentForDetails(index);
+                }
             }
         }
 
@@ -1815,10 +1857,15 @@
             
             targetStudents.forEach((s, i) => {
                 setTimeout(() => {
+                    // زيادة عداد الرسائل المرسلة للطالبة تلقائياً
+                    s.messages = (s.messages || 0) + 1;
                     window.open(`https://wa.me/${s.phone}?text=` + encodeURIComponent(`عزيزي ولي أمر الطالبة / ${s.name}\n\n` + msg), '_blank');
                 }, i * 600);
             });
-            showToast('🚀 جاري فتح رسائل الواتساب الجماعية...');
+            
+            localStorage.setItem(getStorageKeyForStudents(), JSON.stringify(students));
+            render();
+            showToast('🚀 جاري فتح رسائل الواتساب الجماعية وتحديث العدادات...');
         }
 
         function setTheme(themeName) {
