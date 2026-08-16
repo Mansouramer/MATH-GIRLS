@@ -6,8 +6,6 @@
     <title>الابتدائية الأولى - لوحة تحكم مادة الرياضيات</title>
     <!-- مكتبة SheetJS لتصدير واستيراد ملفات إكسل Excel -->
     <script src="https://cdn.jsdelivr.net/npm/xlsx@0.18.5/dist/xlsx.full.min.js"></script>
-    <!-- مكتبة Chart.js للرسوم البيانية -->
-    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
     <style>
         :root {
             --primary: #1e3a8a;
@@ -423,16 +421,34 @@
             .preview-msg { padding: 12px; font-size: 14px; }
         }
 
+        /* تنسيق الأزرار وعناصر التواصل لعدم التداخل */
+        .action-cell-container {
+            display: flex;
+            gap: 6px;
+            align-items: center;
+            justify-content: center;
+            flex-wrap: wrap;
+        }
+
         .whatsapp-btn {
-            display: inline-block;
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
             background: #25D366;
             color: white;
             text-decoration: none;
-            padding: 10px 15px;
+            padding: 8px 12px;
             border-radius: 6px;
             font-weight: bold;
-            margin-top: 5px;
+            font-size: 13px;
             text-align: center;
+            border: none;
+            cursor: pointer;
+            gap: 5px;
+        }
+
+        .whatsapp-btn:hover {
+            opacity: 0.9;
         }
 
         .lessons-grid {
@@ -645,7 +661,7 @@
             .print-target { position: absolute; left: 0; top: 0; width: 100%; }
             table { width: 100% !important; border-collapse: collapse !important; }
             th, td { border: 1px solid #000 !important; padding: 6px !important; color: black !important; }
-            input[type="number"] { border: none !important; background: transparent !important; }
+            input[type="number"], input[type="tel"], input[type="text"] { border: none !important; background: transparent !important; }
         }
     </style>
 </head>
@@ -687,7 +703,7 @@
             </div>
         </div>
 
-        <!-- الإحصائيات -->
+        <!-- الإحصائيات (بدون تحليل ذكي) -->
         <div class="stats-grid">
             <div class="stat-card">
                 <h3>👥 إجمالي الطالبات</h3>
@@ -845,6 +861,13 @@
             <div id="studentCard" style="display: none;">
                 <div>
                     <h4>سجل الطالبة: <span id="selectedName"></span> (<span id="selectedClassBadge" class="class-badge"></span>)</h4>
+                    
+                    <!-- تعديل رقم جوال الطالبة مباشرة من السجل المخصص -->
+                    <div class="form-row" style="margin-top: 10px; align-items: center;">
+                        <input type="tel" id="editStudentPhoneInput" placeholder="تعديل رقم الجوال..." style="flex:1;">
+                        <button class="btn-info" onclick="saveStudentPhone()" style="width: auto;">💾 حفظ رقم الجوال</button>
+                    </div>
+
                     <div class="student-details">
                         <div class="detail-item"><span>المشاركات</span><strong id="sdParticipation">0</strong></div>
                         <div class="detail-item"><span>الواجبات</span><strong id="sdHomework">0</strong></div>
@@ -908,11 +931,11 @@
                     <input type="text" id="bulkExtraNote" placeholder="اكتب ملاحظات إضافية هنا..." oninput="updateBulkMsgPreview()">
                 </div>
                 <div id="bulkMsgPreview" class="preview-msg">اختر الصف والدرس أو الرسالة التشجيعية وأدخل الملاحظات لعرض نموذج الرسالة الجماعية...</div>
-                <button class="whatsapp-btn" onclick="sendBulkWhatsApp()" style="border: none; cursor: pointer; font-size: 15px; width: 100%;">🚀 إرسال جماعي عبر واتساب</button>
+                <button class="whatsapp-btn" onclick="sendBulkWhatsApp()" style="border: none; cursor: pointer; font-size: 15px; width: 100%; justify-content: center;">🚀 إرسال جماعي عبر واتساب</button>
             </div>
         </div>
 
-        <!-- قائمة وحدات ودروس مادة الرياضيات -->
+        <!-- قائمة وحدات ودروس مادة الرياضيات وتعديل إضافة مجموعة الدروس -->
         <div class="section-card">
             <h3 id="curriculumTitle">📚 دليل مقرر الرياضيات - المرحلة الابتدائية (المنهج السعودي) وتتبع التنفيذ</h3>
             
@@ -926,12 +949,12 @@
                 </div>
             </div>
 
-            <!-- إضافة مجموعة دروس دفعة واحدة -->
+            <!-- إضافة مجموعة دروس دفعة واحدة (معدل بالكامل) -->
             <div class="sub-box" style="margin-bottom: 15px; background: rgba(5, 150, 105, 0.04); border: 1px solid var(--secondary);">
                 <h5 style="margin-bottom: 10px; color: var(--secondary);">📦 إضافة مجموعة دروس دفعة واحدة</h5>
                 <p style="font-size: 12px; opacity: 0.85; margin-top: 0;">اكتب كل درس في سطر مستقل بالتنسيق التالي: (عنوان الدرس | التفاصيل والمهارة)</p>
                 <div class="form-row">
-                    <textarea id="bulkLessonsText" rows="3" placeholder="مثال:
+                    <textarea id="bulkLessonsText" rows="4" placeholder="مثال:
 الدرس الأول: الجمع بالعد التنازلي | مهارة استخدام خط الأعداد
 الدرس الثاني: الطرح بالعد العكسي | حل التمارين الذهنية"></textarea>
                 </div>
@@ -1202,7 +1225,7 @@
             showToast('➕ تم إضافة الدرس وحفظه!');
         }
 
-        // دالة لإضافة مجموعة دروس دفعة واحدة
+        // إضافة مجموعة دروس دفعة واحدة
         function addBulkLessonsBatch() {
             const text = document.getElementById('bulkLessonsText').value.trim();
             if(!text) { alert('يرجى كتابة الدروس في مربع النص أولاً'); return; }
@@ -1363,6 +1386,17 @@
             showToast('✅ تم تحديث بيانات الطالبة وحفظها!');
         }
 
+        // حفظ وتعديل رقم جوال الطالبة
+        function saveStudentPhone() {
+            if(selectedStudentIndex === '') return;
+            const newPhone = document.getElementById('editStudentPhoneInput').value.trim();
+            students[selectedStudentIndex].phone = newPhone;
+            localStorage.setItem(getStorageKeyForStudents(), JSON.stringify(students));
+            selectStudentForDetails(selectedStudentIndex);
+            renderStudentsTable();
+            showToast('📱 تم تحديث رقم جوال الطالبة بنجاح!');
+        }
+
         function deleteStudent(index) {
             if(confirm('هل أنت متأكد من حذف هذه الطالبة؟')) {
                 students.splice(index, 1);
@@ -1480,7 +1514,9 @@
                     <td><input type="number" min="0" max="20" value="${s.exam1 || 0}" style="width:60px; text-align:center;" onchange="updateExamScore(${globalIndex}, 'exam1', this.value)"></td>
                     <td><input type="number" min="0" max="20" value="${s.exam2 || 0}" style="width:60px; text-align:center;" onchange="updateExamScore(${globalIndex}, 'exam2', this.value)"></td>
                     <td class="no-print">
-                        <a href="https://wa.me/${s.phone || ''}?text=${encodeURIComponent('عزيزي ولي أمر الطالبة ' + s.name + '، نود إفادتكم بدرجات اختبارات مادة الرياضيات:\n- اختبار الفترة الأولى: ' + (s.exam1 || 0) + '/20\n- اختبار الفترة الثانية: ' + (s.exam2 || 0) + '/20\nمع تمنياتنا لها بدوام التوفيق والنجاح.')}" target="_blank" class="whatsapp-btn" style="padding:4px 10px; font-size:12px;" onclick="incrementMessageCount()">📤 إرسال عبر واتساب</a>
+                        <div class="action-cell-container">
+                            <a href="https://wa.me/${s.phone || ''}?text=${encodeURIComponent('عزيزي ولي أمر الطالبة ' + s.name + '، نود إفادتكم بدرجات اختبارات مادة الرياضيات:\n- اختبار الفترة الأولى: ' + (s.exam1 || 0) + '/20\n- اختبار الفترة الثانية: ' + (s.exam2 || 0) + '/20\nمع تمنياتنا لها بدوام التوفيق والنجاح.')}" target="_blank" class="whatsapp-btn" onclick="incrementMessageCount()">📤 إرسال عبر واتساب</a>
+                        </div>
                     </td>
                 `;
                 tbody.appendChild(tr);
@@ -1656,6 +1692,7 @@
             document.getElementById('studentCard').style.display = 'block';
             document.getElementById('selectedName').textContent = s.name;
             document.getElementById('selectedClassBadge').textContent = s.classCustom || currentGrade;
+            document.getElementById('editStudentPhoneInput').value = s.phone || '';
             document.getElementById('sdParticipation').textContent = s.participation || 0;
             document.getElementById('sdHomework').textContent = s.homework || 0;
             document.getElementById('sdAbsence').textContent = s.absence || 0;
