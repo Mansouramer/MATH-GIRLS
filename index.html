@@ -2,7 +2,7 @@
 <html lang="ar" dir="rtl">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
     <title>فلانة - الابتدائية الأولى (لوحة تحكم مادة الرياضيات)</title>
     <!-- مكتبة SheetJS لتصدير واستيراد ملفات إكسل Excel -->
     <script src="https://cdn.jsdelivr.net/npm/xlsx@0.18.5/dist/xlsx.full.min.js"></script>
@@ -55,45 +55,56 @@
             background-attachment: fixed;
             color: var(--text);
             margin: 0;
-            padding: 20px;
+            padding: 10px;
             transition: background 0.3s ease, color 0.3s ease;
-            user-select: none;
             min-height: 100vh;
+            -webkit-text-size-adjust: 100%;
+        }
+
+        @media (min-width: 768px) {
+            body { padding: 20px; }
         }
 
         .top-banner {
             text-align: center;
             background: linear-gradient(135deg, var(--secondary), var(--primary));
             color: white;
-            padding: 12px;
+            padding: 10px;
             border-radius: 8px;
-            font-size: 14px;
+            font-size: 13px;
             font-weight: bold;
             margin-bottom: 15px;
             box-shadow: 0 2px 5px rgba(0,0,0,0.1);
-            line-height: 1.8;
+            line-height: 1.6;
         }
 
         .header {
             text-align: center;
             background: linear-gradient(135deg, var(--primary), var(--secondary));
             color: white;
-            padding: 25px;
+            padding: 20px 10px;
             border-radius: 15px;
             box-shadow: 0 4px 15px rgba(0,0,0,0.1);
-            margin-bottom: 25px;
+            margin-bottom: 20px;
         }
 
-        .header h1 { margin: 0 0 10px 0; font-size: 24px; }
-        .header div { font-size: 18px; opacity: 0.9; }
-        .header p { margin: 5px 0 0 0; font-size: 14px; opacity: 0.8; }
+        .header h1 { margin: 0 0 10px 0; font-size: 20px; }
+        .header div { font-size: 16px; opacity: 0.9; }
+        .header p { margin: 5px 0 0 0; font-size: 13px; opacity: 0.8; }
+
+        @media (min-width: 768px) {
+            .header { padding: 25px; }
+            .header h1 { font-size: 24px; }
+            .header div { font-size: 18px; }
+            .header p { font-size: 14px; }
+        }
 
         .subscription-badge {
             display: inline-block;
             background: rgba(255, 255, 255, 0.25);
             padding: 5px 15px;
             border-radius: 20px;
-            font-size: 13px;
+            font-size: 12px;
             margin-top: 10px;
             border: 1px solid rgba(255, 255, 255, 0.4);
             font-weight: bold;
@@ -102,11 +113,11 @@
         .theme-switcher {
             display: flex;
             justify-content: center;
-            gap: 10px;
+            gap: 8px;
             margin-top: 15px;
             align-items: center;
             background: rgba(255, 255, 255, 0.2);
-            padding: 8px 15px;
+            padding: 6px 12px;
             border-radius: 20px;
             width: fit-content;
             margin-left: auto;
@@ -116,46 +127,65 @@
         .theme-btn {
             border: 2px solid white;
             border-radius: 50%;
-            width: 28px;
-            height: 28px;
+            width: 26px;
+            height: 26px;
             cursor: pointer;
             padding: 0;
             transition: transform 0.2s;
             display: flex;
             align-items: center;
             justify-content: center;
-            font-size: 14px;
+            font-size: 12px;
             box-shadow: 0 2px 5px rgba(0,0,0,0.2);
         }
 
         .theme-btn:hover { transform: scale(1.2); }
-        .container { max-width: 1200px; margin: 0 auto; }
+        .container { max-width: 1200px; margin: 0 auto; width: 100%; box-sizing: border-box; }
 
         .stats-grid {
             display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
-            gap: 15px;
-            margin-bottom: 25px;
+            grid-template-columns: repeat(2, 1fr);
+            gap: 10px;
+            margin-bottom: 20px;
+        }
+
+        @media (min-width: 640px) {
+            .stats-grid { grid-template-columns: repeat(3, 1fr); gap: 15px; }
+        }
+
+        @media (min-width: 1024px) {
+            .stats-grid { grid-template-columns: repeat(4, 1fr); }
         }
 
         .stat-card {
             background: var(--card-bg);
-            padding: 15px;
-            border-radius: 12px;
+            padding: 12px;
+            border-radius: 10px;
             text-align: center;
             box-shadow: 0 2px 8px rgba(0,0,0,0.05);
             border-bottom: 4px solid var(--secondary);
         }
 
-        .stat-card h3 { margin: 0; font-size: 13px; opacity: 0.8; }
-        .stat-card p { margin: 10px 0 0 0; font-size: 22px; font-weight: bold; color: var(--secondary); }
+        .stat-card h3 { margin: 0; font-size: 12px; opacity: 0.8; }
+        .stat-card p { margin: 8px 0 0 0; font-size: 18px; font-weight: bold; color: var(--secondary); }
+
+        @media (min-width: 768px) {
+            .stat-card { padding: 15px; }
+            .stat-card h3 { font-size: 13px; }
+            .stat-card p { font-size: 22px; }
+        }
 
         .section-card {
             background: var(--card-bg);
-            padding: 20px;
+            padding: 15px;
             border-radius: 12px;
             box-shadow: 0 2px 8px rgba(0,0,0,0.05);
-            margin-bottom: 25px;
+            margin-bottom: 20px;
+            overflow: hidden;
+        }
+
+        @media (min-width: 768px) {
+            .section-card { padding: 20px; margin-bottom: 25px; }
         }
 
         .section-card h3 {
@@ -163,22 +193,35 @@
             color: var(--secondary);
             border-bottom: 2px solid rgba(0,0,0,0.1);
             padding-bottom: 10px;
+            font-size: 16px;
+        }
+
+        @media (min-width: 768px) {
+            .section-card h3 { font-size: 18px; }
         }
 
         .charts-grid {
             display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(320px, 1fr));
-            gap: 20px;
+            grid-template-columns: 1fr;
+            gap: 15px;
             margin-top: 15px;
+        }
+
+        @media (min-width: 768px) {
+            .charts-grid { grid-template-columns: repeat(auto-fit, minmax(320px, 1fr)); gap: 20px; }
         }
 
         .chart-box {
             background: rgba(0,0,0,0.02);
             border: 1px solid rgba(0,0,0,0.08);
             border-radius: 10px;
-            padding: 15px;
+            padding: 10px;
             position: relative;
-            height: 300px;
+            height: 260px;
+        }
+
+        @media (min-width: 768px) {
+            .chart-box { height: 300px; padding: 15px; }
         }
 
         .form-row {
@@ -190,24 +233,35 @@
 
         .form-row input, .form-row select {
             flex: 1;
-            min-width: 160px;
-            padding: 10px;
+            min-width: 100%;
+            padding: 12px;
             border: 1px solid #ccc;
             border-radius: 6px;
-            font-size: 14px;
+            font-size: 16px; /* منع التكبير التلقائي في آي فون */
             background-color: var(--card-bg);
             color: var(--text);
+            box-sizing: border-box;
+        }
+
+        @media (min-width: 640px) {
+            .form-row input, .form-row select { min-width: 160px; font-size: 14px; }
         }
 
         button {
             background: var(--secondary);
             color: white;
             border: none;
-            padding: 10px 20px;
+            padding: 12px 18px;
             border-radius: 6px;
             cursor: pointer;
             font-weight: bold;
             transition: 0.2s;
+            font-size: 14px;
+            width: 100%;
+        }
+
+        @media (min-width: 640px) {
+            button { width: auto; }
         }
 
         button:hover { opacity: 0.9; }
@@ -216,12 +270,12 @@
         .btn-warning { background: var(--warning); }
         .btn-excel { background: var(--excel); }
         .btn-print { background: #4b5563; }
-        .btn-action { padding: 4px 8px; font-size: 12px; margin: 0 2px; }
+        .btn-action { padding: 6px 10px; font-size: 12px; margin: 2px; width: auto; }
 
         .classes-query-grid {
             display: flex;
             flex-wrap: wrap;
-            gap: 10px;
+            gap: 8px;
             margin: 15px 0;
             align-items: center;
         }
@@ -233,20 +287,24 @@
             overflow: hidden;
             border: 2px solid var(--secondary);
             background: rgba(0, 0, 0, 0.04);
-            flex: 1;
-            min-width: 150px;
+            flex: 1 1 140px;
         }
 
         .class-query-btn {
             background: transparent;
             border: none;
             color: var(--text);
-            padding: 10px 15px;
+            padding: 10px;
             cursor: pointer;
             font-weight: bold;
-            font-size: 14px;
+            font-size: 13px;
             flex: 1;
-            text-align: right;
+            text-align: center;
+            width: auto;
+        }
+
+        @media (min-width: 768px) {
+            .class-query-btn { text-align: right; padding: 10px 15px; font-size: 14px; }
         }
 
         .class-btn-wrapper.active {
@@ -262,12 +320,13 @@
             background: rgba(239, 68, 68, 0.15);
             border: none;
             color: var(--danger);
-            padding: 0 12px;
+            padding: 0 10px;
             cursor: pointer;
-            font-size: 14px;
+            font-size: 13px;
             display: flex;
             align-items: center;
             justify-content: center;
+            width: auto;
         }
 
         .class-delete-btn:hover {
@@ -275,16 +334,31 @@
             color: white;
         }
 
+        /* تحسين التمرير الأفقي للجداول على الشاشات الصغيرة */
+        .table-responsive {
+            width: 100%;
+            overflow-x: auto;
+            -webkit-overflow-scrolling: touch;
+            margin-top: 15px;
+            border: 1px solid rgba(0,0,0,0.1);
+            border-radius: 8px;
+        }
+
         table {
             width: 100%;
             border-collapse: collapse;
-            margin-top: 15px;
+            white-space: nowrap;
         }
 
         th, td {
             border: 1px solid rgba(0,0,0,0.1);
-            padding: 10px;
+            padding: 10px 8px;
             text-align: center;
+            font-size: 13px;
+        }
+
+        @media (min-width: 768px) {
+            th, td { padding: 10px; font-size: 14px; }
         }
 
         th { background-color: rgba(0,0,0,0.05); color: var(--secondary); }
@@ -305,47 +379,72 @@
             display: flex;
             gap: 5px;
             align-items: center;
+            width: 100%;
+            justify-content: center;
+        }
+
+        @media (min-width: 640px) {
+            .pagination-btns { width: auto; }
         }
 
         .pagination-btns button {
             padding: 6px 12px;
             font-size: 13px;
+            width: auto;
         }
 
         .student-details {
             display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(130px, 1fr));
+            grid-template-columns: repeat(2, 1fr);
             gap: 10px;
             margin: 15px 0;
             background: rgba(0,0,0,0.03);
-            padding: 15px;
+            padding: 12px;
             border-radius: 8px;
         }
 
+        @media (min-width: 640px) {
+            .student-details { grid-template-columns: repeat(auto-fit, minmax(130px, 1fr)); padding: 15px; }
+        }
+
         .detail-item { text-align: center; }
-        .detail-item span { display: block; font-size: 12px; opacity: 0.8; }
-        .detail-item strong { font-size: 18px; color: var(--secondary); }
+        .detail-item span { display: block; font-size: 11px; opacity: 0.8; }
+        .detail-item strong { font-size: 16px; color: var(--secondary); }
+
+        @media (min-width: 768px) {
+            .detail-item span { font-size: 12px; }
+            .detail-item strong { font-size: 18px; }
+        }
 
         .sub-box {
             background: rgba(0,0,0,0.02);
             border: 1px solid rgba(0,0,0,0.1);
             border-radius: 8px;
-            padding: 15px;
+            padding: 12px;
             margin-top: 15px;
         }
 
-        .sub-box h5 { margin-top: 0; color: var(--secondary); font-size: 16px; }
+        @media (min-width: 768px) {
+            .sub-box { padding: 15px; }
+        }
+
+        .sub-box h5 { margin-top: 0; color: var(--secondary); font-size: 15px; }
 
         .preview-msg {
             background: rgba(37, 99, 235, 0.08);
             border-right: 4px solid var(--secondary);
-            padding: 12px;
+            padding: 10px;
             margin: 10px 0;
             border-radius: 4px;
             white-space: pre-wrap;
-            font-size: 14px;
+            font-size: 13px;
             direction: rtl;
             text-align: right;
+            word-break: break-word;
+        }
+
+        @media (min-width: 768px) {
+            .preview-msg { padding: 12px; font-size: 14px; }
         }
 
         .whatsapp-btn {
@@ -357,16 +456,21 @@
             border-radius: 6px;
             font-weight: bold;
             margin-top: 5px;
+            text-align: center;
         }
 
         .lessons-grid {
             display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+            grid-template-columns: 1fr;
             gap: 12px;
             margin-top: 15px;
             max-height: 520px;
             overflow-y: auto;
             padding: 5px;
+        }
+
+        @media (min-width: 768px) {
+            .lessons-grid { grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); }
         }
 
         .lesson-card {
@@ -407,6 +511,7 @@
             justify-content: space-between;
             align-items: center;
             margin-top: 10px;
+            gap: 5px;
         }
 
         .status-toggle-btn {
@@ -416,6 +521,7 @@
             cursor: pointer;
             border: none;
             font-weight: bold;
+            width: auto;
         }
 
         .status-toggle-btn.done { background-color: var(--secondary); color: white; }
@@ -433,15 +539,23 @@
             display: none;
             box-shadow: 0 4px 10px rgba(0,0,0,0.2);
             z-index: 1000;
+            font-size: 13px;
+            width: 80%;
+            max-width: 300px;
+            text-align: center;
         }
 
         .backup-controls {
             display: flex;
-            gap: 10px;
+            gap: 8px;
             margin-top: 15px;
             padding-top: 15px;
             border-top: 1px dashed #ccc;
             flex-wrap: wrap;
+        }
+
+        .backup-controls button {
+            flex: 1 1 140px;
         }
 
         .class-badge {
@@ -449,7 +563,7 @@
             color: white;
             padding: 3px 8px;
             border-radius: 12px;
-            font-size: 12px;
+            font-size: 11px;
             font-weight: bold;
         }
 
@@ -463,7 +577,7 @@
             padding: 12px;
             border: 1px solid #ccc;
             border-radius: 6px;
-            font-size: 15px;
+            font-size: 16px;
             background-color: var(--card-bg);
             color: var(--text);
             box-sizing: border-box;
@@ -474,7 +588,7 @@
             top: 100%;
             left: 0;
             right: 0;
-            max-height: 250px;
+            max-height: 220px;
             overflow-y: auto;
             background: var(--card-bg);
             border: 1px solid var(--secondary);
@@ -500,9 +614,9 @@
 
         .footer-note {
             text-align: center;
-            margin-top: 30px;
+            margin-top: 25px;
             padding: 15px;
-            font-size: 14px;
+            font-size: 13px;
             opacity: 0.75;
             border-top: 1px solid rgba(0,0,0,0.1);
             line-height: 1.8;
@@ -510,17 +624,17 @@
 
         .floating-action-buttons {
             position: fixed;
-            bottom: 25px;
-            right: 25px;
+            bottom: 20px;
+            right: 20px;
             display: flex;
             flex-direction: column;
-            gap: 12px;
+            gap: 10px;
             z-index: 999;
         }
 
         .float-btn {
-            width: 50px;
-            height: 50px;
+            width: 45px;
+            height: 45px;
             border-radius: 50%;
             background: var(--secondary);
             color: white;
@@ -530,8 +644,12 @@
             display: flex;
             align-items: center;
             justify-content: center;
-            font-size: 20px;
+            font-size: 18px;
             text-decoration: none;
+        }
+
+        @media (min-width: 768px) {
+            .float-btn { width: 50px; height: 50px; font-size: 20px; }
         }
 
         .float-whatsapp { background: #25D366; }
@@ -634,7 +752,7 @@
         <div class="section-card" id="analyticsSection">
             <div style="display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 10px; border-bottom: 2px solid rgba(0,0,0,0.1); padding-bottom: 10px; margin-bottom: 15px;">
                 <h3 style="margin: 0; border: none; padding: 0;">🧠 لوحة التحليل الذكي ومؤشرات الأداء الأكاديمي</h3>
-                <button class="btn-print" onclick="printSection('analyticsSection')">🖨️ طباعة تقرير التحليل الذكي الشامل</button>
+                <button class="btn-print" onclick="printSection('analyticsSection')">🖨️ طباعة تقرير التحليل</button>
             </div>
 
             <div class="student-details" style="grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); margin-bottom: 20px;">
@@ -677,7 +795,7 @@
 
         <!-- تسجيل الطالبات والصفوف والجدول -->
         <div class="section-card" id="studentsTableSection">
-            <div style="display: flex; justify-content: space-between; align-items: center; border-bottom: 2px solid rgba(0,0,0,0.1); padding-bottom: 10px; margin-bottom: 15px;">
+            <div style="display: flex; justify-content: space-between; align-items: center; border-bottom: 2px solid rgba(0,0,0,0.1); padding-bottom: 10px; margin-bottom: 15px; flex-wrap: wrap; gap: 10px;">
                 <h3 style="margin: 0; border: none; padding: 0;">✏️ تسجيل الطالبات والصفوف ومتابعة السجل</h3>
                 <button class="btn-print" onclick="printSection('studentsTableSection')" title="طباعة جدول الطالبات والصفوف">🖨️ طباعة الجدول</button>
             </div>
@@ -695,11 +813,11 @@
             </div>
 
             <div class="form-row" style="align-items: center; background: rgba(0,0,0,0.03); padding: 8px; border-radius: 6px; margin-top: 15px;">
-                <span style="font-weight: bold; font-size: 14px;">🔍 بحث عن طالبة محددة بالاسم:</span>
-                <input type="text" id="filterStudentNameInput" placeholder="اكتب اسم الطالبة للبحث..." oninput="filterTableByStudentInput()" style="max-width: 320px;">
+                <span style="font-weight: bold; font-size: 14px; width: 100%;">🔍 بحث عن طالبة محددة بالاسم:</span>
+                <input type="text" id="filterStudentNameInput" placeholder="اكتب اسم الطالبة للبحث..." oninput="filterTableByStudentInput()" style="width: 100%;">
             </div>
 
-            <div style="overflow-x: auto;">
+            <div class="table-responsive">
                 <table>
                     <thead>
                         <tr>
@@ -729,11 +847,11 @@
             </div>
 
             <div class="backup-controls">
-                <button class="btn-excel" onclick="exportExcel()">📊 تصدير إلى إكسل (Excel)</button>
-                <button class="btn-warning" onclick="document.getElementById('importExcelFile').click()">📂 استيراد من إكسل (Excel)</button>
+                <button class="btn-excel" onclick="exportExcel()">📊 تصدير إكسل</button>
+                <button class="btn-warning" onclick="document.getElementById('importExcelFile').click()">📂 استيراد إكسل</button>
                 <input type="file" id="importExcelFile" accept=".xlsx, .xls" style="display: none;" onchange="importExcel(event)">
 
-                <button class="btn-info" onclick="exportData()" style="margin-right: auto;">💾 تصدير JSON</button>
+                <button class="btn-info" onclick="exportData()">💾 تصدير JSON</button>
                 <button class="btn-warning" onclick="document.getElementById('importFile').click()">📂 استرجاع JSON</button>
                 <input type="file" id="importFile" accept=".json" style="display: none;" onchange="importData(event)">
             </div>
@@ -742,8 +860,8 @@
         <!-- رصد اختبارات الفترة الأولى والثانية -->
         <div class="section-card" id="examsSection">
             <div style="display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 10px; border-bottom: 2px solid rgba(0,0,0,0.1); padding-bottom: 10px; margin-bottom: 15px;">
-                <h3 style="margin: 0; border: none; padding: 0;">📊 رصد وتحليل اختبارات الفترة الأولى والفترة الثانية لمادة الرياضيات (من ٢٠) 📝</h3>
-                <button class="btn-print" onclick="printSection('examsSection')">🖨️ طباعة تقرير رصد وتحليل الاختبارات</button>
+                <h3 style="margin: 0; border: none; padding: 0;">📊 رصد وتحليل اختبارات الفترة الأولى والثانية (من ٢٠) 📝</h3>
+                <button class="btn-print" onclick="printSection('examsSection')">🖨️ طباعة تقرير الاختبارات</button>
             </div>
             
             <div class="form-row">
@@ -766,7 +884,7 @@
                 </div>
             </div>
 
-            <div style="overflow-x: auto;">
+            <div class="table-responsive">
                 <table>
                     <thead>
                         <tr>
@@ -774,7 +892,7 @@
                             <th>🏫 الصف</th>
                             <th>📝 اختبار الفترة الأولى (من 20)</th>
                             <th>📝 اختبار الفترة الثانية (من 20)</th>
-                            <th class="no-print">📤 إرسال النتيجة لولي الأمر</th>
+                            <th class="no-print">📤 إرسال النتيجة</th>
                         </tr>
                     </thead>
                     <tbody id="examsTbody">
@@ -809,7 +927,7 @@
 
                 <div class="form-row" style="margin-top: 15px;">
                     <button class="btn-print" onclick="printStudentReport()">🖨️ طباعة تقرير الطالبة الرسمي</button>
-                    <button class="whatsapp-btn" onclick="sendFullReportWhatsApp()" style="border: none; cursor: pointer; margin-top: 0;">📤 إرسال التقرير الشامل لولي الأمر عبر واتساب</button>
+                    <button class="whatsapp-btn" onclick="sendFullReportWhatsApp()" style="border: none; cursor: pointer; margin-top: 0; width: 100%;">📤 إرسال التقرير الشامل لولي الأمر عبر واتساب</button>
                 </div>
 
                 <div class="sub-box">
@@ -833,7 +951,7 @@
                     </div>
                     
                     <div class="form-row" style="margin-top: 10px; background: rgba(37, 99, 235, 0.05); padding: 10px; border-radius: 6px;">
-                        <input type="text" id="newMotivationTitle" placeholder="عنوان الرسالة..." style="max-width: 220px;">
+                        <input type="text" id="newMotivationTitle" placeholder="عنوان الرسالة...">
                         <input type="text" id="newMotivationText" placeholder="اكتب نص الرسالة التشجيعية الجديدة هنا...">
                         <button onclick="addNewMotivation()">➕ إضافة رسالة تشجيعية</button>
                     </div>
@@ -860,13 +978,13 @@
                     <input type="text" id="bulkExtraNote" placeholder="اكتب ملاحظات إضافية هنا..." oninput="updateBulkMsgPreview()">
                 </div>
                 <div id="bulkMsgPreview" class="preview-msg">اختر الصف والدرس أو الرسالة التشجيعية وأدخل الملاحظات لعرض نموذج الرسالة الجماعية...</div>
-                <button class="whatsapp-btn" onclick="sendBulkWhatsApp()" style="border: none; cursor: pointer; font-size: 15px;">🚀 إرسال جماعي عبر واتساب</button>
+                <button class="whatsapp-btn" onclick="sendBulkWhatsApp()" style="border: none; cursor: pointer; font-size: 15px; width: 100%;">🚀 إرسال جماعي عبر واتساب</button>
             </div>
         </div>
 
         <!-- قائمة وحدات ودروس مادة الرياضيات -->
         <div class="section-card">
-            <h3 id="curriculumTitle">📚 دليل مقرر الرياضيات - المرحلة الابتدائية (المنهج السعودي المعتمد للفصلين) وتتبع التنفيذ</h3>
+            <h3 id="curriculumTitle">📚 دليل مقرر الرياضيات - المرحلة الابتدائية (المنهج السعودي) وتتبع التنفيذ</h3>
             
             <div class="sub-box" style="margin-bottom: 15px; margin-top: 0;">
                 <h5 style="margin-bottom: 10px;">➕ إضافة درس جديد أو وحدة للمنهج</h5>
@@ -935,7 +1053,6 @@
 
         let customMotivations = JSON.parse(localStorage.getItem('awwal_custom_motivations_math_v4')) || defaultMotivations;
 
-        // المنهج السعودي لمادة الرياضيات للفصلين (الأول والثاني) لكل صف ابتدائي
         const gradeMathData = {
             "الأول الابتدائي": [
                 { chapter: "الفصل 1: المقارنة والتصنيف", title: "التصنيف وفق خاصية واحدة والمقارنة", desc: "تصنيف الأشياء حسب اللون، الشكل، أو الحجم والمقارنة بينها." },
@@ -1007,12 +1124,9 @@
         let students = JSON.parse(localStorage.getItem(getStorageKeyForStudents())) || [];
         let lessonStatus = JSON.parse(localStorage.getItem(getStorageKeyForStatus())) || {};
 
-        /* ================== دوال الطباعة المفعلة ================== */
         function printSection(sectionId) {
             const section = document.getElementById(sectionId);
             if (!section) return;
-
-            // تطبيق كلاس الطباعة على العنصر المترجم
             section.classList.add('print-target');
             window.print();
             section.classList.remove('print-target');
@@ -1025,7 +1139,6 @@
             }
             const printArea = document.getElementById('studentReportPrintArea');
             if (!printArea) return;
-
             printArea.classList.add('print-target');
             window.print();
             printArea.classList.remove('print-target');
@@ -1043,7 +1156,6 @@
                 btn.style.display = 'none';
             }
         });
-        /* ========================================================= */
 
         function changeGradeLevel(grade) {
             currentGrade = grade;
@@ -1233,11 +1345,11 @@
                     <td><strong>${s.name}</strong></td>
                     <td><span class="class-badge">${s.classCustom || currentGrade}</span></td>
                     <td>${s.phone || '-'}</td>
-                    <td><input type="number" value="${s.absence}" min="0" style="width:50px; text-align:center;" onchange="updateStudentField(${globalIndex}, 'absence', this.value)"></td>
-                    <td><input type="number" value="${s.participation}" min="0" style="width:50px; text-align:center;" onchange="updateStudentField(${globalIndex}, 'participation', this.value)"></td>
-                    <td><input type="number" value="${s.homework}" min="0" style="width:50px; text-align:center;" onchange="updateStudentField(${globalIndex}, 'homework', this.value)"></td>
-                    <td><input type="number" value="${s.skills}" min="0" style="width:50px; text-align:center;" onchange="updateStudentField(${globalIndex}, 'skills', this.value)"></td>
-                    <td><input type="number" value="${s.projects}" min="0" style="width:50px; text-align:center;" onchange="updateStudentField(${globalIndex}, 'projects', this.value)"></td>
+                    <td><input type="number" value="${s.absence}" min="0" style="width:45px; text-align:center;" onchange="updateStudentField(${globalIndex}, 'absence', this.value)"></td>
+                    <td><input type="number" value="${s.participation}" min="0" style="width:45px; text-align:center;" onchange="updateStudentField(${globalIndex}, 'participation', this.value)"></td>
+                    <td><input type="number" value="${s.homework}" min="0" style="width:45px; text-align:center;" onchange="updateStudentField(${globalIndex}, 'homework', this.value)"></td>
+                    <td><input type="number" value="${s.skills}" min="0" style="width:45px; text-align:center;" onchange="updateStudentField(${globalIndex}, 'skills', this.value)"></td>
+                    <td><input type="number" value="${s.projects}" min="0" style="width:45px; text-align:center;" onchange="updateStudentField(${globalIndex}, 'projects', this.value)"></td>
                     <td>${s.messages || 0}</td>
                     <td class="no-print"><button class="btn-action btn-danger" onclick="deleteStudent(${globalIndex})">حذف</button></td>
                 `;
@@ -1368,8 +1480,8 @@
                 tr.innerHTML = `
                     <td><strong>${s.name}</strong></td>
                     <td><span class="class-badge">${s.classCustom || currentGrade}</span></td>
-                    <td><input type="number" min="0" max="20" value="${s.exam1 || 0}" style="width:70px; text-align:center;" onchange="updateExamScore(${globalIndex}, 'exam1', this.value)"></td>
-                    <td><input type="number" min="0" max="20" value="${s.exam2 || 0}" style="width:70px; text-align:center;" onchange="updateExamScore(${globalIndex}, 'exam2', this.value)"></td>
+                    <td><input type="number" min="0" max="20" value="${s.exam1 || 0}" style="width:60px; text-align:center;" onchange="updateExamScore(${globalIndex}, 'exam1', this.value)"></td>
+                    <td><input type="number" min="0" max="20" value="${s.exam2 || 0}" style="width:60px; text-align:center;" onchange="updateExamScore(${globalIndex}, 'exam2', this.value)"></td>
                     <td class="no-print">
                         <a href="https://wa.me/${s.phone || ''}?text=${encodeURIComponent('عزيزي ولي أمر الطالبة ' + s.name + '، نود إفادتكم بدرجات اختبارات مادة الرياضيات:\n- اختبار الفترة الأولى: ' + (s.exam1 || 0) + '/20\n- اختبار الفترة الثانية: ' + (s.exam2 || 0) + '/20\nمع تمنياتنا لها بدوام التوفيق والنجاح.')}" target="_blank" class="whatsapp-btn" style="padding:4px 10px; font-size:12px;" onclick="incrementMessageCount()">📤 إرسال عبر واتساب</a>
                     </td>
@@ -1680,7 +1792,7 @@
             localStorage.setItem('awwal_math_theme_v4', themeName);
         }
 
-        const savedTheme = localStorage.getItem('awwal_math_theme_v4');
+        const savedTheme = localStorage.getItem('awwal_math_theme_v04');
         if(savedTheme) document.body.className = savedTheme;
 
         window.onload = function() {
