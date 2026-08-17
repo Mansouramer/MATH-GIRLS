@@ -913,7 +913,7 @@
             </div>
         </div>
 
-        <!-- إرسال جماعي لأولياء الأمور (مُعدل لعرض الأسماء والإرسال اليدوي الفردي المنظم) -->
+        <!-- إرسال جماعي لأولياء الأمور -->
         <div class="section-card">
             <h3>📢 إرسال رسالة أو واجب جماعي لأولياء الأمور (مع عرض أسماء الطالبات للإرسال اليدوي المنظم)</h3>
             <div class="sub-box" style="margin-top: 0;">
@@ -930,9 +930,8 @@
                 </div>
                 <div id="bulkMsgPreview" class="preview-msg">اختر الصف والدرس أو الرسالة التشجيعية وأدخل الملاحظات لعرض نموذج الرسالة الجماعية...</div>
                 
-                <!-- قائمة الطالبات للإرسال اليدوي المنظم -->
                 <div style="margin-top: 15px;">
-                    <h5 style="margin-bottom: 8px; color: var(--secondary);">👥 قائمة الطالبات المستهدفات (اضغط على "إرسال" أمام كل طالبة لإرسال الرسالة بشكل يدوي منظم):</h5>
+                    <h5 style="margin-bottom: 8px; color: var(--secondary);">👥 قائمة الطالبات المستهدفات (اضغط على "إرسال" أمام كل طالبة للإرسال اليدوي المنظم):</h5>
                     <div class="table-responsive">
                         <table>
                             <thead>
@@ -953,7 +952,7 @@
             </div>
         </div>
 
-        <!-- قائمة وحدات ودروس مادة الرياضيات وتعديل إضافة مجموعة الدروس -->
+        <!-- قائمة وحدات ودروس مادة الرياضيات -->
         <div class="section-card">
             <h3 id="curriculumTitle">📚 دليل مقرر الرياضيات - المرحلة الابتدائية (المنهج السعودي) وتتبع التنفيذ</h3>
             
@@ -1879,7 +1878,6 @@
             msgTemplate += `\n\nمع التحية، المعلم: ${TEACHER_NAME} - ${SCHOOL_NAME}`;
             preview.textContent = msgTemplate;
 
-            // تصفية وعرض الطالبات للإرسال اليدوي الفردي المنظم
             let targetStudents = students;
             if(targetClass !== 'ALL') {
                 targetStudents = students.filter(s => (s.classCustom || currentGrade) === targetClass);
