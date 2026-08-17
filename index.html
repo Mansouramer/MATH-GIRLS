@@ -1535,7 +1535,6 @@
             students[index][field] = val === "" ? 0 : Number(val);
             localStorage.setItem(getStorageKeyForStudents(), JSON.stringify(students));
             
-            // تحديث المتوسطات الحسابية مباشرة بدون إعادة رسم الجدول كاملاً لتجنب فقدان التركيز (Focus) أثناء الكتابة
             const selectedClass = document.getElementById('examClassSelect').value;
             if(selectedClass) {
                 const classStudents = students.filter(s => (s.classCustom || currentGrade) === selectedClass);
@@ -1866,12 +1865,13 @@
             targetStudents = targetStudents.filter(s => s.phone && s.phone.trim() !== '');
             if(targetStudents.length === 0) { alert('لا توجد أرقام جوالات مسجلة للطالبات المستهدفات'); return; }
 
-            let msg = document.getElementById('bulkMsgPreview').textContent;
+            let baseMsg = document.getElementById('bulkMsgPreview').textContent;
             
             targetStudents.forEach((s, i) => {
                 setTimeout(() => {
                     s.messages = (s.messages || 0) + 1;
-                    window.open(`https://wa.me/${s.phone}?text=` + encodeURIComponent(`عزيزي ولي أمر الطالبة / ${s.name}\n\n` + msg), '_blank');
+                    let personalMsg = `عزيزي ولي أمر الطالبة / ${s.name}\n\n` + baseMsg;
+                    window.open(`https://wa.me/${s.phone}?text=` + encodeURIComponent(personalMsg), '_blank');
                 }, i * 600);
             });
             
