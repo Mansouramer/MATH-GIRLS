@@ -1198,7 +1198,6 @@
             bulkSelectLesson.innerHTML += lessonsGroup + motivGroup;
             document.getElementById('totalExecutedLessons').textContent = `${executedCount} / ${lessons.length}`;
             
-            // تحديث القائمة المنسدلة للرسائل التشجيعية في قسم الاستعلام الفردي
             const selectMotivation = document.getElementById('selectMotivation');
             if(selectMotivation) {
                 selectMotivation.innerHTML = '<option value="">-- اختر الرسالة التشجيعية --</option>';
@@ -1511,6 +1510,9 @@
                 sum2 += Number(s.exam2) || 0;
 
                 const tr = document.createElement('tr');
+                let examMsg = 'عزيزي ولي أمر الطالبة ' + s.name + '، نود إفادتكم بدرجات اختبارات مادة الرياضيات:\n- اختبار الفترة الأولى: ' + (s.exam1 || 0) + '/20\n- اختبار الفترة الثانية: ' + (s.exam2 || 0) + '/20\nمع تمنياتنا لها بدوام التوفيق والنجاح.';
+                let encodedExamMsg = encodeURIComponent(examMsg);
+
                 tr.innerHTML = `
                     <td><strong>${s.name}</strong></td>
                     <td><span class="class-badge">${s.classCustom || currentGrade}</span></td>
@@ -1518,7 +1520,7 @@
                     <td><input type="number" min="0" max="20" value="${s.exam2 || 0}" style="width:60px; text-align:center;" onchange="updateExamScore(${globalIndex}, 'exam2', this.value)"></td>
                     <td class="no-print">
                         <div class="action-cell-container">
-                            <a href="https://wa.me/${s.phone || ''}?text=${encodeURIComponent('عزيزي ولي أمر الطالبة ' + s.name + '، نود إفادتكم بدرجات اختبارات مادة الرياضيات:\n- اختبار الفترة الأولى: ' + (s.exam1 || 0) + '/20\n- اختبار الفترة الثانية: ' + (s.exam2 || 0) + '/20\nمع تمنياتنا لها بدوام التوفيق والنجاح.')}" target="_blank" class="whatsapp-btn" onclick="incrementMessageCountGlobal(${globalIndex})">📤 إرسال عبر واتساب</a>
+                            <a href="https://wa.me/${s.phone || ''}?text=${encodedExamMsg}" target="_blank" class="whatsapp-btn" onclick="incrementMessageCountGlobal(${globalIndex})">📤 إرسال عبر واتساب</a>
                         </div>
                     </td>
                 `;
@@ -1767,7 +1769,6 @@
             showToast('🌟 تمت إضافة رسالة التحفيز بنجاح!');
         }
 
-        // إرسال التقرير الشامل لولي الأمر عبر الواتساب (مفعل بالكامل)
         function sendFullReportWhatsApp() {
             if(selectedStudentIndex === '') return;
             const s = students[selectedStudentIndex];
@@ -1857,7 +1858,6 @@
             
             targetStudents.forEach((s, i) => {
                 setTimeout(() => {
-                    // زيادة عداد الرسائل المرسلة للطالبة تلقائياً
                     s.messages = (s.messages || 0) + 1;
                     window.open(`https://wa.me/${s.phone}?text=` + encodeURIComponent(`عزيزي ولي أمر الطالبة / ${s.name}\n\n` + msg), '_blank');
                 }, i * 600);
