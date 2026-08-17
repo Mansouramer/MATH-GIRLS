@@ -913,12 +913,12 @@
             </div>
         </div>
 
-        <!-- إرسال جماعي لأولياء الأمور -->
+        <!-- إرسال جماعي لأولياء الأمور (مُعدل لعرض الأسماء والإرسال اليدوي الفردي المنظم) -->
         <div class="section-card">
-            <h3>📢 إرسال رسالة أو واجب جماعي لأولياء الأمور</h3>
+            <h3>📢 إرسال رسالة أو واجب جماعي لأولياء الأمور (مع عرض أسماء الطالبات للإرسال اليدوي المنظم)</h3>
             <div class="sub-box" style="margin-top: 0;">
                 <div class="form-row">
-                    <select id="bulkTargetClass">
+                    <select id="bulkTargetClass" onchange="updateBulkMsgPreview()">
                         <option value="ALL">جميع الصفوف</option>
                     </select>
                     <select id="bulkSelectLesson" onchange="updateBulkMsgPreview()">
@@ -929,7 +929,27 @@
                     <input type="text" id="bulkExtraNote" placeholder="اكتب ملاحظات إضافية هنا..." oninput="updateBulkMsgPreview()">
                 </div>
                 <div id="bulkMsgPreview" class="preview-msg">اختر الصف والدرس أو الرسالة التشجيعية وأدخل الملاحظات لعرض نموذج الرسالة الجماعية...</div>
-                <button class="whatsapp-btn" onclick="sendBulkWhatsApp()" style="border: none; cursor: pointer; font-size: 15px; width: 100%; justify-content: center;">🚀 إرسال جماعي عبر واتساب</button>
+                
+                <!-- قائمة الطالبات للإرسال اليدوي المنظم -->
+                <div style="margin-top: 15px;">
+                    <h5 style="margin-bottom: 8px; color: var(--secondary);">👥 قائمة الطالبات المستهدفات (اضغط على "إرسال" أمام كل طالبة لإرسال الرسالة بشكل يدوي منظم):</h5>
+                    <div class="table-responsive">
+                        <table>
+                            <thead>
+                                <tr>
+                                    <th>م</th>
+                                    <th>اسم الطالبة</th>
+                                    <th>الصف</th>
+                                    <th>رقم الجوال</th>
+                                    <th>إجراء الإرسال اليدوي</th>
+                                </tr>
+                            </thead>
+                            <tbody id="bulkStudentsListTbody">
+                                <tr><td colspan="5" style="padding: 15px; opacity: 0.7;">الرجاء اختيار الدرس وتحديد الصف لعرض الطالبات وأزرار الإرسال.</td></tr>
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
             </div>
         </div>
 
@@ -1302,6 +1322,7 @@
 
             renderStudentsTable();
             renderClassesQuery();
+            updateBulkMsgPreview();
         }
 
         function addStudent() {
@@ -1476,10 +1497,14 @@
 
         function updateBulkTargetSelect(classesSet) {
             const select = document.getElementById('bulkTargetClass');
+            const currentVal = select.value;
             select.innerHTML = '<option value="ALL">جميع الصفوف</option>';
             classesSet.forEach(cName => {
                 select.innerHTML += `<option value="${cName}">${cName}</option>`;
             });
+            if(currentVal && (currentVal === 'ALL' || classesSet.has(currentVal))) {
+                select.value = currentVal;
+            }
         }
 
         function renderExamsTable() {
@@ -1831,53 +1856,58 @@
             const val = document.getElementById('bulkSelectLesson').value;
             const note = document.getElementById('bulkExtraNote').value.trim();
             const preview = document.getElementById('bulkMsgPreview');
+            const targetClass = document.getElementById('bulkTargetClass').value;
+            const tbody = document.getElementById('bulkStudentsListTbody');
 
             if(!val) {
                 preview.textContent = "اختر الصف والدرس أو الرسالة التشجيعية وأدخل الملاحظات لعرض نموذج الرسالة الجماعية...";
+                tbody.innerHTML = `<tr><td colspan="5" style="padding: 15px; opacity: 0.7;">الرجاء اختيار الدرس أو الرسالة أعلاه أولاً.</td></tr>`;
                 return;
             }
 
-            let msg = "";
+            let msgTemplate = "";
             if(val.startsWith('lesson-')) {
                 const idx = val.split('-')[1];
                 const l = lessons[idx];
-                msg = `أولياء الأمور الأفاضل، نود إحاطتكم بأننا سندرس في مادة الرياضيات:\n📘 (${l.chapter}) - ${l.title}\nالتفاصيل: ${l.desc}`;
+                msgTemplate = `أولياء الأمور الأفاضل، نود إحاطتكم بأننا سندرس في مادة الرياضيات:\n📘 (${l.chapter}) - ${l.title}\nالتفاصيل: ${l.desc}`;
             } else if(val.startsWith('motiv-')) {
                 const idx = val.split('-')[1];
-                msg = customMotivations[idx].text;
+                msgTemplate = customMotivations[idx].text;
             }
 
-            if(note) msg += `\n\nملاحظة إضافية: ${note}`;
-            msg += `\n\nمع التحية، المعلم: ${TEACHER_NAME} - ${SCHOOL_NAME}`;
-            preview.textContent = msg;
-        }
+            if(note) msgTemplate += `\n\nملاحظة إضافية: ${note}`;
+            msgTemplate += `\n\nمع التحية، المعلم: ${TEACHER_NAME} - ${SCHOOL_NAME}`;
+            preview.textContent = msgTemplate;
 
-        function sendBulkWhatsApp() {
-            const targetClass = document.getElementById('bulkTargetClass').value;
-            const val = document.getElementById('bulkSelectLesson').value;
-            if(!val) { alert('الرجاء اختيار الدرس أو الرسالة للإرسال الجماعي'); return; }
-
+            // تصفية وعرض الطالبات للإرسال اليدوي الفردي المنظم
             let targetStudents = students;
             if(targetClass !== 'ALL') {
                 targetStudents = students.filter(s => (s.classCustom || currentGrade) === targetClass);
             }
 
-            targetStudents = targetStudents.filter(s => s.phone && s.phone.trim() !== '');
-            if(targetStudents.length === 0) { alert('لا توجد أرقام جوالات مسجلة للطالبات المستهدفات'); return; }
+            tbody.innerHTML = '';
+            if(targetStudents.length === 0) {
+                tbody.innerHTML = `<tr><td colspan="5" style="padding: 15px; opacity: 0.7;">لا توجد طالبات مسجلات في هذا الصف.</td></tr>`;
+                return;
+            }
 
-            let baseMsg = document.getElementById('bulkMsgPreview').textContent;
-            
             targetStudents.forEach((s, i) => {
-                setTimeout(() => {
-                    s.messages = (s.messages || 0) + 1;
-                    let personalMsg = `عزيزي ولي أمر الطالبة / ${s.name}\n\n` + baseMsg;
-                    window.open(`https://wa.me/${s.phone}?text=` + encodeURIComponent(personalMsg), '_blank');
-                }, i * 600);
+                const globalIdx = students.indexOf(s);
+                const personalizedMsg = `عزيزي ولي أمر الطالبة / ${s.name}\n\n` + msgTemplate;
+                const encodedMsg = encodeURIComponent(personalizedMsg);
+
+                const tr = document.createElement('tr');
+                tr.innerHTML = `
+                    <td>${i + 1}</td>
+                    <td><strong>${s.name}</strong></td>
+                    <td><span class="class-badge">${s.classCustom || currentGrade}</span></td>
+                    <td>${s.phone || '<span style="color:var(--danger)">لا يوجد رقم</span>'}</td>
+                    <td>
+                        ${s.phone ? `<a href="https://wa.me/${s.phone}?text=${encodedMsg}" target="_blank" class="whatsapp-btn" onclick="incrementMessageCountGlobal(${globalIdx})">📤 إرسال يدوي</a>` : '<span style="opacity:0.5; font-size:12px;">غير متوفر</span>'}
+                    </td>
+                `;
+                tbody.appendChild(tr);
             });
-            
-            localStorage.setItem(getStorageKeyForStudents(), JSON.stringify(students));
-            render();
-            showToast('🚀 جاري فتح رسائل الواتساب الجماعية وتحديث العدادات...');
         }
 
         function setTheme(themeName) {
