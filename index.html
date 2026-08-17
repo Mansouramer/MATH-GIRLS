@@ -247,6 +247,40 @@
         .btn-print { background: #4b5563; }
         .btn-action { padding: 6px 10px; font-size: 12px; margin: 2px; width: auto; }
 
+        /* تصميم أزرار الأسهم المصغرة لزيادة ونقصان القيم */
+        .counter-cell {
+            display: inline-flex;
+            align-items: center;
+            gap: 4px;
+            background: rgba(0,0,0,0.03);
+            padding: 3px;
+            border-radius: 6px;
+            border: 1px solid rgba(0,0,0,0.1);
+        }
+        .counter-btn {
+            background: var(--secondary);
+            color: white;
+            border: none;
+            width: 24px;
+            height: 24px;
+            border-radius: 4px;
+            font-weight: bold;
+            font-size: 14px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            cursor: pointer;
+            padding: 0;
+        }
+        .counter-btn:hover { opacity: 0.85; }
+        .counter-value {
+            font-weight: bold;
+            font-size: 14px;
+            min-width: 22px;
+            text-align: center;
+            color: var(--text);
+        }
+
         .classes-query-grid {
             display: flex;
             flex-wrap: wrap;
@@ -650,7 +684,9 @@
             body { background: white !important; color: black !important; padding: 0 !important; }
             .top-banner, .subscription-badge, .theme-switcher, .floating-action-buttons, .toast,
             .btn-action, .backup-controls, .pagination-bar, .form-row, .classes-query-grid,
-            .no-print, button, input, select, textarea, .sub-box, .searchable-dropdown-container { display: none !important; }
+            .no-print, button, input, select, textarea, .sub-box, .searchable-dropdown-container,
+            /* إخفاء قسم التحليل الإحصائي الرقمي عند الطباعة تماماً بناءً على الطلب */
+            #examsAnalysisBox { display: none !important; }
             
             .container { max-width: 100% !important; margin: 0 !important; width: 100% !important; }
             .section-card { box-shadow: none !important; border: 1px solid #ccc !important; page-break-inside: avoid; }
@@ -741,7 +777,7 @@
         <!-- تسجيل الطالبات والصفوف والجدول -->
         <div class="section-card" id="studentsTableSection">
             <div style="display: flex; justify-content: space-between; align-items: center; border-bottom: 2px solid rgba(0,0,0,0.1); padding-bottom: 10px; margin-bottom: 15px; flex-wrap: wrap; gap: 10px;">
-                <h3 style="margin: 0; border: none; padding: 0;">✏️ تسجيل الطالبات والصفوف ومتابعة السجل</h3>
+                <h3 style="margin: 0; border: none; padding: 0;">✏️ تسجيل الطالبات والصفوف ومتابعة السجل (التعديل بالأسهم)</h3>
                 <button class="btn-print" onclick="printSection('studentsTableSection')" title="طباعة جدول الطالبات والصفوف">🖨️ طباعة الجدول</button>
             </div>
             
@@ -802,19 +838,20 @@
             </div>
         </div>
 
-        <!-- رصد اختبارات الفترة الأولى والثانية -->
+        <!-- تقرير رصد مؤشرات التحليل الإحصائي مع درجات الاختبار -->
         <div class="section-card" id="examsSection">
             <div style="display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 10px; border-bottom: 2px solid rgba(0,0,0,0.1); padding-bottom: 10px; margin-bottom: 15px;">
-                <h3 style="margin: 0; border: none; padding: 0;">📊 رصد وتحليل اختبارات الفترة الأولى والثانية (من ٢٠) 📝</h3>
-                <button class="btn-print" onclick="printSection('examsSection')">🖨️ طباعة تقرير الاختبارات</button>
+                <h3 style="margin: 0; border: none; padding: 0;">📊 تقرير رصد مؤشرات التحليل الإحصائي مع درجات الاختبار 📝</h3>
+                <button class="btn-print" onclick="printSection('examsSection')">🖨️ طباعة تقرير رصد المؤشرات والدرجات</button>
             </div>
             
             <div class="form-row">
                 <select id="examClassSelect" onchange="renderExamsTable()">
-                    <option value="">-- اختر الصف لعرض وسجل الاختبارات --</option>
+                    <option value="">-- اختر الصف لعرض السجل وتقرير المؤشرات والدرجات --</option>
                 </select>
             </div>
 
+            <!-- تم تخصيص هذا الصندوق ليتم إخفاؤه تلقائياً عند الطباعة بناءً على توجيهاتك -->
             <div id="examsAnalysisBox" class="sub-box" style="display: none; margin-bottom: 15px;">
                 <h5>📈 مؤشرات التحليل الإحصائي لنتائج الصف المحدد</h5>
                 <div class="student-details" style="margin: 10px 0;">
@@ -841,7 +878,7 @@
                         </tr>
                     </thead>
                     <tbody id="examsTbody">
-                        <tr><td colspan="5" style="padding: 20px; opacity: 0.7;">الرجاء اختيار الصف الدراسي من القائمة أعلاه لعرض رصد واختبارات الطالبات.</td></tr>
+                        <tr><td colspan="5" style="padding: 20px; opacity: 0.7;">الرجاء اختيار الصف الدراسي من القائمة أعلاه لعرض تقرير رصد المؤشرات ودرجات الطالبات.</td></tr>
                     </tbody>
                 </table>
             </div>
@@ -930,9 +967,8 @@
                 </div>
                 <div id="bulkMsgPreview" class="preview-msg">اختر الصف والدرس أو الرسالة التشجيعية وأدخل الملاحظات لعرض نموذج الرسالة الجماعية...</div>
                 
-                <!-- قائمة الطالبات للإرسال اليدوي المنظم -->
                 <div style="margin-top: 15px;">
-                    <h5 style="margin-bottom: 8px; color: var(--secondary);">👥 قائمة الطالبات المستهدفات (اضغط على "إرسال" أمام كل طالبة للإرسال بشكل يدوي منظم):</h5>
+                    <h5 style="margin-bottom: 8px; color: var(--secondary);">👥 قائمة الطالبات المستهدفات (اضغط على "إرسال" أمام كل طالبة لإرسال الرسالة بشكل يدوي منظم):</h5>
                     <div class="table-responsive">
                         <table>
                             <thead>
@@ -1353,6 +1389,28 @@
             showToast('➕ تمت إضافة الطالبة بنجاح!');
         }
 
+        // دالة إنشاء خلايا الأسهم (أزرار الزيادة والنقصان)
+        function createCounterCell(globalIndex, field, value) {
+            return `
+                <div class="counter-cell">
+                    <button class="counter-btn" onclick="modifyStudentField(${globalIndex}, '${field}', -1)">-</button>
+                    <span class="counter-value">${value || 0}</span>
+                    <button class="counter-btn" onclick="modifyStudentField(${globalIndex}, '${field}', 1)">+</button>
+                </div>
+            `;
+        }
+
+        function modifyStudentField(index, field, delta) {
+            let currentVal = Number(students[index][field]) || 0;
+            let newVal = currentVal + delta;
+            if(newVal < 0) newVal = 0;
+            students[index][field] = newVal;
+            
+            localStorage.setItem(getStorageKeyForStudents(), JSON.stringify(students));
+            render();
+            showToast('✅ تم تحديث القيمة وحفظها بنجاح!');
+        }
+
         function renderStudentsTable() {
             const tbody = document.getElementById('studentsTbody');
             tbody.innerHTML = '';
@@ -1388,11 +1446,11 @@
                     <td><strong>${s.name}</strong></td>
                     <td><span class="class-badge">${s.classCustom || currentGrade}</span></td>
                     <td>${s.phone || '-'}</td>
-                    <td><input type="number" value="${s.absence}" min="0" style="width:45px; text-align:center;" onchange="updateStudentField(${globalIndex}, 'absence', this.value)"></td>
-                    <td><input type="number" value="${s.participation}" min="0" style="width:45px; text-align:center;" onchange="updateStudentField(${globalIndex}, 'participation', this.value)"></td>
-                    <td><input type="number" value="${s.homework}" min="0" style="width:45px; text-align:center;" onchange="updateStudentField(${globalIndex}, 'homework', this.value)"></td>
-                    <td><input type="number" value="${s.skills}" min="0" style="width:45px; text-align:center;" onchange="updateStudentField(${globalIndex}, 'skills', this.value)"></td>
-                    <td><input type="number" value="${s.projects}" min="0" style="width:45px; text-align:center;" onchange="updateStudentField(${globalIndex}, 'projects', this.value)"></td>
+                    <td>${createCounterCell(globalIndex, 'absence', s.absence)}</td>
+                    <td>${createCounterCell(globalIndex, 'participation', s.participation)}</td>
+                    <td>${createCounterCell(globalIndex, 'homework', s.homework)}</td>
+                    <td>${createCounterCell(globalIndex, 'skills', s.skills)}</td>
+                    <td>${createCounterCell(globalIndex, 'projects', s.projects)}</td>
                     <td>${s.messages || 0}</td>
                     <td class="no-print"><button class="btn-action btn-danger" onclick="deleteStudent(${globalIndex})">حذف</button></td>
                 `;
@@ -1401,13 +1459,6 @@
 
             document.getElementById('paginationInfo').textContent = `عرض من ${startIdx + 1} إلى ${Math.min(startIdx + rowsPerPage, totalRows)} من أصل ${totalRows} طالبة`;
             document.getElementById('pageIndicator').textContent = `${currentPage} / ${totalPages}`;
-        }
-
-        function updateStudentField(index, field, val) {
-            students[index][field] = Number(val) || 0;
-            localStorage.setItem(getStorageKeyForStudents(), JSON.stringify(students));
-            render();
-            showToast('✅ تم تحديث بيانات الطالبة وحفظها!');
         }
 
         function saveStudentPhone() {
@@ -1487,7 +1538,7 @@
         function updateExamClassSelect(classesSet) {
             const select = document.getElementById('examClassSelect');
             const currentVal = select.value;
-            select.innerHTML = '<option value="">-- اختر الصف لعرض وسجل الاختبارات --</option>';
+            select.innerHTML = '<option value="">-- اختر الصف لعرض السجل وتقرير المؤشرات والدرجات --</option>';
             classesSet.forEach(cName => {
                 select.innerHTML += `<option value="${cName}">${cName}</option>`;
             });
@@ -1514,7 +1565,7 @@
             tbody.innerHTML = '';
 
             if(!selectedClass) {
-                tbody.innerHTML = `<tr><td colspan="5" style="padding: 20px; opacity: 0.7;">الرجاء اختيار الصف الدراسي من القائمة أعلاه لعرض رصد واختبارات الطالبات.</td></tr>`;
+                tbody.innerHTML = `<tr><td colspan="5" style="padding: 20px; opacity: 0.7;">الرجاء اختيار الصف الدراسي من القائمة أعلاه لعرض تقرير رصد المؤشرات ودرجات الطالبات.</td></tr>`;
                 analysisBox.style.display = 'none';
                 return;
             }
