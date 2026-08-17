@@ -681,22 +681,41 @@
         .float-top { background: var(--primary); display: none; }
 
         @media print {
-            body { background: white !important; color: black !important; padding: 0 !important; }
+            @page {
+                size: A4 landscape; /* فرض اتجاه الصفحة أفقي لتتسع عناصر الجدول بالكامل في صفحة واحدة */
+                margin: 5mm;
+            }
+            body { 
+                background: white !important; 
+                color: black !important; 
+                padding: 0 !important; 
+                zoom: 85%; /* تصغير تدريجي طفيف لضمان احتواء المحتوى ضمن صفحة واحدة */
+            }
             .top-banner, .subscription-badge, .theme-switcher, .floating-action-buttons, .toast,
             .btn-action, .backup-controls, .pagination-bar, .form-row, .classes-query-grid,
-            .no-print, button, input, select, textarea, .sub-box, .searchable-dropdown-container,
-            /* إخفاء قسم التحليل الإحصائي الرقمي عند الطباعة تماماً بناءً على الطلب */
+            .no-print, button, select, textarea, .sub-box, .searchable-dropdown-container,
             #examsAnalysisBox { display: none !important; }
             
             .container { max-width: 100% !important; margin: 0 !important; width: 100% !important; }
-            .section-card { box-shadow: none !important; border: 1px solid #ccc !important; page-break-inside: avoid; }
+            .section-card { box-shadow: none !important; border: 1px solid #ccc !important; page-break-inside: avoid; margin-bottom: 10px !important; padding: 10px !important; }
             
             body * { visibility: hidden; }
             .print-target, .print-target * { visibility: visible; }
             .print-target { position: absolute; left: 0; top: 0; width: 100%; }
-            table { width: 100% !important; border-collapse: collapse !important; }
-            th, td { border: 1px solid #000 !important; padding: 6px !important; color: black !important; }
-            input[type="number"], input[type="tel"], input[type="text"] { border: none !important; background: transparent !important; }
+            
+            table { width: 100% !important; border-collapse: collapse !important; font-size: 12px !important; }
+            th, td { border: 1px solid #000 !important; padding: 4px !important; color: black !important; }
+            
+            /* إظهار الأرقام المكتوبة بداخل حقول الإدخال عند الطباعة بشكل واضح بدلاً من إخفائها */
+            input[type="number"], input[type="tel"], input[type="text"] { 
+                border: none !important; 
+                background: transparent !important; 
+                color: black !important; 
+                font-weight: bold !important;
+                text-align: center !important;
+                display: inline-block !important;
+                visibility: visible !important;
+            }
         }
     </style>
 </head>
@@ -851,7 +870,6 @@
                 </select>
             </div>
 
-            <!-- تم تخصيص هذا الصندوق ليتم إخفاؤه تلقائياً عند الطباعة بناءً على توجيهاتك -->
             <div id="examsAnalysisBox" class="sub-box" style="display: none; margin-bottom: 15px;">
                 <h5>📈 مؤشرات التحليل الإحصائي لنتائج الصف المحدد</h5>
                 <div class="student-details" style="margin: 10px 0;">
@@ -1389,7 +1407,6 @@
             showToast('➕ تمت إضافة الطالبة بنجاح!');
         }
 
-        // دالة إنشاء خلايا الأسهم (أزرار الزيادة والنقصان)
         function createCounterCell(globalIndex, field, value) {
             return `
                 <div class="counter-cell">
