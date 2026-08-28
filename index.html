@@ -4,6 +4,8 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
     <title>الابتدائية الأولى - لوحة تحكم مادة الرياضيات</title>
+    <!-- رابط ملف الـ Manifest لتثبيت التطبيق -->
+    <link rel="manifest" href="manifest.json">
     <!-- مكتبة SheetJS لتصدير واستيراد ملفات إكسل Excel -->
     <script src="https://cdn.jsdelivr.net/npm/xlsx@0.18.5/dist/xlsx.full.min.js"></script>
     <style>
@@ -567,16 +569,55 @@
             text-align: center;
         }
 
-        .backup-controls {
+        /* تحسين التجاوب وجعل أزرار التحكم مستطيلات فوق بعضها بشكل متناسق للشاشات والصغيرات والجوالات */
+        .backup-controls,
+        .stacked-controls {
             display: flex;
-            gap: 8px;
-            margin-top: 15px;
-            padding-top: 15px;
-            border-top: 1px dashed #ccc;
-            flex-wrap: wrap;
+            flex-direction: column;
+            gap: 10px;
+            width: 100%;
+            max-width: 480px;
+            margin: 15px auto 0 auto;
+            box-sizing: border-box;
         }
 
-        .backup-controls button { flex: 1 1 140px; }
+        .backup-controls {
+            padding-top: 15px;
+            border-top: 1px dashed #ccc;
+        }
+
+        .backup-controls button,
+        .stacked-controls button,
+        .stacked-controls select,
+        .stacked-controls input {
+            width: 100% !important;
+            box-sizing: border-box;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin: 0 !important;
+        }
+
+        .section-header-row {
+            display: flex;
+            flex-direction: column;
+            gap: 10px;
+            border-bottom: 2px solid rgba(0,0,0,0.1);
+            padding-bottom: 10px;
+            margin-bottom: 15px;
+        }
+
+        .section-header-row h3 {
+            margin: 0;
+            border: none;
+            padding: 0;
+        }
+
+        .section-header-row button {
+            width: 100%;
+            max-width: 480px;
+            margin: 0 auto;
+        }
 
         .class-badge {
             background-color: var(--secondary);
@@ -691,7 +732,6 @@
             .btn-action, .backup-controls, .pagination-bar, .form-row, .classes-query-grid,
             .no-print, button, select, textarea, .searchable-dropdown-container { display: none !important; }
             
-            /* إظهار صندوق مؤشرات التحليل الإحصائي عند الطباعة بوضوح */
             #examsAnalysisBox { display: block !important; visibility: visible !important; background: #f8fafc !important; border: 1px solid #1e3a8a !important; }
             
             .container { max-width: 100% !important; margin: 0 !important; width: 100% !important; }
@@ -731,6 +771,13 @@
         <div>إعداد المعلمة: فلانة</div>
         <p>لوحة تحكم معلمة مادة الرياضيات للمرحلة الابتدائية (وفق المنهج السعودي)</p>
         <div class="subscription-badge">⏳ نهاية الاشتراك: 2027/07/01</div>
+
+        <!-- زر التثبيت البنفسجي المضاف هنا في الهيدر -->
+        <div style="margin-top: 15px;">
+            <button onclick="installApp()" id="installBtn" class="bg-purple-600 hover:bg-purple-700 text-white px-4 py-2 rounded-xl text-xs font-bold transition shadow-md hidden" style="background-color: #7c3aed; display: none; margin: 0 auto; width: auto;">
+                📱 تثبيت التطبيق كبرنامج مستقل
+            </button>
+        </div>
 
         <div class="theme-switcher">
             <span style="font-size: 12px; margin-left: 5px;">🎨 المظهر:</span>
@@ -795,7 +842,7 @@
 
         <!-- تسجيل الطالبات والصفوف والجدول -->
         <div class="section-card" id="studentsTableSection">
-            <div style="display: flex; justify-content: space-between; align-items: center; border-bottom: 2px solid rgba(0,0,0,0.1); padding-bottom: 10px; margin-bottom: 15px; flex-wrap: wrap; gap: 10px;">
+            <div class="section-header-row">
                 <h3 style="margin: 0; border: none; padding: 0;">✏️ تسجيل الطالبات والصفوف ومتابعة السجل (التعديل بالأسهم)</h3>
                 <button class="btn-print" onclick="printSection('studentsTableSection')" title="طباعة جدول الطالبات والصفوف">🖨️ طباعة الجدول</button>
             </div>
@@ -859,12 +906,12 @@
 
         <!-- تقرير رصد مؤشرات التحليل الإحصائي مع درجات الاختبار -->
         <div class="section-card" id="examsSection">
-            <div style="display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 10px; border-bottom: 2px solid rgba(0,0,0,0.1); padding-bottom: 10px; margin-bottom: 15px;">
+            <div class="section-header-row">
                 <h3 style="margin: 0; border: none; padding: 0;">📊 تقرير رصد مؤشرات التحليل الإحصائي مع درجات الاختبار 📝</h3>
                 <button class="btn-print" onclick="printSection('examsSection')">🖨️ طباعة تقرير رصد المؤشرات والدرجات</button>
             </div>
             
-            <div class="form-row">
+            <div class="stacked-controls">
                 <select id="examClassSelect" onchange="renderExamsTable()">
                     <option value="">-- اختر الصف لعرض السجل وتقرير المؤشرات والدرجات --</option>
                 </select>
@@ -931,9 +978,9 @@
                     </div>
                 </div>
 
-                <div class="form-row" style="margin-top: 15px;">
+                <div class="stacked-controls" style="margin-top: 15px;">
                     <button class="btn-print" onclick="printStudentReport()">🖨️ طباعة تقرير الطالبة الرسمي</button>
-                    <button class="whatsapp-btn" onclick="sendFullReportWhatsApp()" style="border: none; cursor: pointer; margin-top: 0; width: 100%;">📤 إرسال التقرير الشامل لولي الأمر عبر واتساب</button>
+                    <button class="whatsapp-btn" onclick="sendFullReportWhatsApp()" style="border: none; cursor: pointer;">📤 إرسال التقرير الشامل لولي الأمر عبر واتساب</button>
                 </div>
 
                 <div class="sub-box">
@@ -1006,33 +1053,35 @@
                 </div>
             </div>
         </div>
-<!-- القسم المدمج الجديد: تتبع إتقان كل درس -->
-<div class="section-card" id="masterySection">
-    <div style="display: flex; justify-content: space-between; align-items: center; border-bottom: 2px solid rgba(0,0,0,0.1); padding-bottom: 10px; margin-bottom: 15px;">
-        <h3 style="margin: 0; border: none; padding: 0;">🎯 تتبع إتقان كل درس لكل طالب</h3>
-        <button class="btn-print" onclick="printSection('masterySection')">🖨️ طباعة التقرير</button>
-    </div>
-    <div class="form-row">
-        <select id="masteryLessonSelect" onchange="renderMasteryTable()">
-            <option value="">-- اختر الدرس لتحديد حالة الإتقان --</option>
-        </select>
-    </div>
-    <div class="table-responsive">
-        <table>
-            <thead>
-                <tr>
-                    <th>اسم الطالب</th>
-                    <th>الصف</th>
-                    <th>الحالة</th>
-                    <th>تبديل الحالة</th>
-                </tr>
-            </thead>
-            <tbody id="masteryTbody">
-                <tr><td colspan="4">الرجاء اختيار درس من القائمة أعلاه</td></tr>
-            </tbody>
-        </table>
-    </div>
-</div>
+
+        <!-- القسم المدمج الجديد: تتبع إتقان كل درس -->
+        <div class="section-card" id="masterySection">
+            <div class="section-header-row">
+                <h3 style="margin: 0; border: none; padding: 0;">🎯 تتبع إتقان كل درس لكل طالب</h3>
+                <button class="btn-print" onclick="printSection('masterySection')">🖨️ طباعة التقرير</button>
+            </div>
+            <div class="stacked-controls">
+                <select id="masteryLessonSelect" onchange="renderMasteryTable()">
+                    <option value="">-- اختر الدرس لتحديد حالة الإتقان --</option>
+                </select>
+            </div>
+            <div class="table-responsive">
+                <table>
+                    <thead>
+                        <tr>
+                            <th>اسم الطالب</th>
+                            <th>الصف</th>
+                            <th>الحالة</th>
+                            <th>تبديل الحالة</th>
+                        </tr>
+                    </thead>
+                    <tbody id="masteryTbody">
+                        <tr><td colspan="4">الرجاء اختيار درس من القائمة أعلاه</td></tr>
+                    </tbody>
+                </table>
+            </div>
+        </div>
+
         <!-- قائمة وحدات ودروس مادة الرياضيات وتعديل إضافة مجموعة الدروس -->
         <div class="section-card">
             <h3 id="curriculumTitle">📚 دليل مقرر الرياضيات - المرحلة الابتدائية (المنهج السعودي) وتتبع التنفيذ</h3>
@@ -1078,18 +1127,20 @@
         </div>
 
     </div>
-<div class="section-card" style="text-align: center; background: #ffffff; margin: 20px auto; max-width: 600px; border-radius: 12px; box-shadow: 0 4px 15px rgba(0,0,0,0.08); padding: 20px;">
-    <h4 style="color: var(--secondary, #2563eb); margin: 0 0 15px 0; font-size: 16px;">💾 النسخ الاحتياطي وإدارة البيانات</h4>
-    <div style="display: flex; justify-content: center; gap: 12px; flex-wrap: wrap;">
-        <button class="btn-info" onclick="backupAllData()" style="background: #e11d48; padding: 10px 20px; font-size: 14px; border-radius: 6px; cursor: pointer; color: white; border: none; width: auto; font-weight: bold;">
-            💾 حفظ نسخة كاملة
-        </button>
-        <input type="file" id="importBackupFile" accept=".json" style="display: none;" onchange="restoreDashboardData(event)">
-        <button class="btn-warning" onclick="document.getElementById('importBackupFile').click()" style="background: #f59e0b; padding: 10px 20px; font-size: 14px; border-radius: 6px; cursor: pointer; color: white; border: none; width: auto; font-weight: bold;">
-            📂 استرجاع النسخة
-        </button>
+
+    <div class="section-card" style="text-align: center; background: #ffffff; margin: 20px auto; max-width: 600px; border-radius: 12px; box-shadow: 0 4px 15px rgba(0,0,0,0.08); padding: 20px;">
+        <h4 style="color: var(--secondary, #2563eb); margin: 0 0 15px 0; font-size: 16px;">💾 النسخ الاحتياطي وإدارة البيانات</h4>
+        <div class="stacked-controls">
+            <button class="btn-info" onclick="backupAllData()" style="background: #e11d48; padding: 12px 20px; font-size: 14px; border-radius: 6px; cursor: pointer; color: white; border: none; font-weight: bold;">
+                💾 حفظ نسخة كاملة
+            </button>
+            <input type="file" id="importBackupFile" accept=".json" style="display: none;" onchange="restoreDashboardData(event)">
+            <button class="btn-warning" onclick="document.getElementById('importBackupFile').click()" style="background: #f59e0b; padding: 12px 20px; font-size: 14px; border-radius: 6px; cursor: pointer; color: white; border: none; font-weight: bold;">
+                📂 استرجاع النسخة
+            </button>
+        </div>
     </div>
-</div>
+
     <!-- الأزرار العائمة -->
     <div class="floating-action-buttons">
         <a href="https://wa.me/966581015002" target="_blank" class="float-btn float-whatsapp" title="تواصل الدعم الفني عبر واتساب">💬</a>
@@ -1099,6 +1150,30 @@
     <div id="toast" class="toast">✅ تم حفظ البيانات تلقائياً!</div>
 
     <script>
+        // كود تشغيل وتفعيل زر التثبيت والتطبيق المصغر (PWA)
+        let deferredPrompt;
+        window.addEventListener('beforeinstallprompt', (e) => {
+            e.preventDefault();
+            deferredPrompt = e;
+            const installBtn = document.getElementById('installBtn');
+            if (installBtn) {
+                installBtn.classList.remove('hidden');
+                installBtn.style.display = 'inline-block';
+            }
+        });
+
+        function installApp() {
+            if (deferredPrompt) {
+                deferredPrompt.prompt();
+                deferredPrompt.userChoice.then((choiceResult) => {
+                    if (choiceResult.outcome === 'accepted') {
+                        console.log('تم قبول تثبيت التطبيق');
+                    }
+                    deferredPrompt = null;
+                });
+            }
+        }
+
         const TEACHER_NAME = "منصور عامر الرحيلي";
         const SCHOOL_NAME = "الابتدائية الأولى (طالبات)";
 
@@ -2022,92 +2097,98 @@
         const savedTheme = localStorage.getItem('awwal_math_theme_v4');
         if(savedTheme) document.body.className = savedTheme;
 
-        
         window.onload = function() {
-    renderLessons();
-    render();
-    setupMasterySystem(); // <-- أضف هذا السطر فقط
-};// دالة لتعبئة قائمة الدروس وتحديث الجدول
-function setupMasterySystem() {
-    const select = document.getElementById('masteryLessonSelect');
-    if(!select) return;
-    lessons.forEach((l, idx) => {
-        select.innerHTML += `<option value="${idx}">[${l.chapter}] ${l.title}</option>`;
-    });
-}
+            renderLessons();
+            render();
+            setupMasterySystem();
+        };
 
-function renderMasteryTable() {
-    const lessonIdx = document.getElementById('masteryLessonSelect').value;
-    const tbody = document.getElementById('masteryTbody');
-    if(lessonIdx === "") return;
-
-    tbody.innerHTML = '';
-    students.forEach((s, idx) => {
-        if(!s.mastery) s.mastery = {};
-        const isMastered = !!s.mastery[lessonIdx];
-        
-        tbody.innerHTML += `
-            <tr>
-                <td><strong>${s.name}</strong></td>
-                <td><span class="class-badge">${s.classCustom || currentGrade}</span></td>
-                <td><span id="m_badge_${idx}" class="class-badge" style="background:${isMastered ? '#059669' : '#f59e0b'}">${isMastered ? 'متقن' : 'بحاجة لمراجعة'}</span></td>
-                <td><button class="btn-action" onclick="toggleMastery(${idx}, ${lessonIdx})">🔄 تبديل</button></td>
-            </tr>
-        `;
-    });
-}
-
-function toggleMastery(sIdx, lIdx) {
-    if(!students[sIdx].mastery) students[sIdx].mastery = {};
-    students[sIdx].mastery[lIdx] = !students[sIdx].mastery[lIdx];
-    localStorage.setItem(getStorageKeyForStudents(), JSON.stringify(students));
-    renderMasteryTable();
-    showToast('✅ تم تحديث حالة الإتقان!');
-}// دالة حفظ النسخة الاحتياطية الكاملة
-function backupAllData() {
-    const fullBackup = {
-        students: typeof students !== 'undefined' ? students : [],
-        lessons: typeof lessons !== 'undefined' ? lessons : [],
-        timestamp: new Date().toLocaleString('ar-SA')
-    };
-
-    const dataStr = "data:text/json;charset=utf-8," + encodeURIComponent(JSON.stringify(fullBackup));
-    const dlAnchor = document.createElement('a');
-    dlAnchor.setAttribute("href", dataStr);
-    dlAnchor.setAttribute("download", `نسخة_احتياطية_الداش_بورد_${new Date().toISOString().slice(0,10)}.json`);
-    document.body.appendChild(dlAnchor);
-    dlAnchor.click();
-    dlAnchor.remove();
-    
-    if (typeof showToast === 'function') {
-        showToast('💾 تم حفظ النسخة الاحتياطية على جهازك بنجاح!');
-    } else {
-        alert('تم حفظ النسخة الاحتياطية على جهازك بنجاح.');
-    }
-}// دالة استرجاع النسخة الاحتياطية
-function restoreDashboardData(event) {
-    const file = event.target.files[0];
-    if(!file) return;
-    const reader = new FileReader();
-    reader.onload = function(e) {
-        try {
-            const imported = JSON.parse(e.target.result);
-            if(imported) {
-                if(imported.students) localStorage.setItem(getStorageKeyForStudents(), JSON.stringify(imported.students));
-                if(imported.lessons) localStorage.setItem(getStorageKeyForLessons(), JSON.stringify(imported.lessons));
-                alert('📂 تم استرجاع البيانات بنجاح!');
-                location.reload();
-            } else {
-                alert('ملف النسخة الاحتياطية غير صالح.');
-            }
-        } catch(err) {
-            alert('خطأ في قراءة ملف JSON.');
-        } finally {
-            event.target.value = '';
+        function setupMasterySystem() {
+            const select = document.getElementById('masteryLessonSelect');
+            if(!select) return;
+            select.innerHTML = '<option value="">-- اختر الدرس لتحديد حالة الإتقان --</option>';
+            lessons.forEach((l, idx) => {
+                select.innerHTML += `<option value="${idx}">[${l.chapter}] ${l.title}</option>`;
+            });
         }
-    };
-    reader.readAsText(file);
-}
+
+        function renderMasteryTable() {
+            const lessonIdx = document.getElementById('masteryLessonSelect').value;
+            const tbody = document.getElementById('masteryTbody');
+            if(lessonIdx === "") {
+                tbody.innerHTML = `<tr><td colspan="4">الرجاء اختيار درس من القائمة أعلاه</td></tr>`;
+                return;
+            }
+
+            tbody.innerHTML = '';
+            students.forEach((s, idx) => {
+                if(!s.mastery) s.mastery = {};
+                const isMastered = !!s.mastery[lessonIdx];
+                
+                tbody.innerHTML += `
+                    <tr>
+                        <td><strong>${s.name}</strong></td>
+                        <td><span class="class-badge">${s.classCustom || currentGrade}</span></td>
+                        <td><span id="m_badge_${idx}" class="class-badge" style="background:${isMastered ? '#059669' : '#f59e0b'}">${isMastered ? 'متقن' : 'بحاجة لمراجعة'}</span></td>
+                        <td><button class="btn-action" onclick="toggleMastery(${idx}, ${lessonIdx})">🔄 تبديل</button></td>
+                    </tr>
+                `;
+            });
+        }
+
+        function toggleMastery(sIdx, lIdx) {
+            if(!students[sIdx].mastery) students[sIdx].mastery = {};
+            students[sIdx].mastery[lIdx] = !students[sIdx].mastery[lIdx];
+            localStorage.setItem(getStorageKeyForStudents(), JSON.stringify(students));
+            renderMasteryTable();
+            showToast('✅ تم تحديث حالة الإتقان!');
+        }
+
+        function backupAllData() {
+            const fullBackup = {
+                students: typeof students !== 'undefined' ? students : [],
+                lessons: typeof lessons !== 'undefined' ? lessons : [],
+                timestamp: new Date().toLocaleString('ar-SA')
+            };
+
+            const dataStr = "data:text/json;charset=utf-8," + encodeURIComponent(JSON.stringify(fullBackup));
+            const dlAnchor = document.createElement('a');
+            dlAnchor.setAttribute("href", dataStr);
+            dlAnchor.setAttribute("download", `نسخة_احتياطية_الداش_بورد_${new Date().toISOString().slice(0,10)}.json`);
+            document.body.appendChild(dlAnchor);
+            dlAnchor.click();
+            dlAnchor.remove();
+            
+            if (typeof showToast === 'function') {
+                showToast('💾 تم حفظ النسخة الاحتياطية على جهازك بنجاح!');
+            } else {
+                alert('تم حفظ النسخة الاحتياطية على جهازك بنجاح.');
+            }
+        }
+
+        function restoreDashboardData(event) {
+            const file = event.target.files[0];
+            if(!file) return;
+            const reader = new FileReader();
+            reader.onload = function(e) {
+                try {
+                    const imported = JSON.parse(e.target.result);
+                    if(imported) {
+                        if(imported.students) localStorage.setItem(getStorageKeyForStudents(), JSON.stringify(imported.students));
+                        if(imported.lessons) localStorage.setItem(getStorageKeyForLessons(), JSON.stringify(imported.lessons));
+                        alert('📂 تم استرجاع البيانات بنجاح!');
+                        location.reload();
+                    } else {
+                        alert('ملف النسخة الاحتياطية غير صالح.');
+                    }
+                } catch(err) {
+                    alert('خطأ في قراءة ملف JSON.');
+                } finally {
+                    event.target.value = '';
+                }
+            };
+            reader.readAsText(file);
+        }
     </script>
 </body>
 </html>
