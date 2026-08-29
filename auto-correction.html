@@ -941,11 +941,18 @@
             convertAllNumbersInDOM();
             window.scrollTo({ top: document.body.scrollHeight, behavior: 'smooth' });
         }
+window.addEventListener('DOMContentLoaded', () => {
+    const savedSchool = localStorage.getItem('schoolName');
+    if (savedSchool) {
+        const headerTitle = document.querySelector('.header-nav h2');
+        if (headerTitle) {
+            headerTitle.textContent = `${savedSchool} (بنات)`;
+        }
+    }
 
-        window.addEventListener('DOMContentLoaded', () => {
-            convertAllNumbersInDOM();
-            convertInputValues();
-        });
+    convertAllNumbersInDOM();
+    convertInputValues();
+});
     </script>
 </body>
 </html>
